@@ -1,0 +1,161 @@
+<div class="content">
+  <div class="row">
+    <div class="leftcolumn">
+      <form [formGroup]="profilFormGroup" (ngSubmit)="UpdateProfile()">
+        <mat-card>
+        <h2 class="h2-center">Osnovni podaci</h2>
+        <mat-form-field appearance="outline" class="data-mat-fields">
+          <mat-label>Ime</mat-label>
+          <input matInput placeholder="Ime" type="text" formControlName="name" required>
+          <mat-error [ngClass]="{'show': profilFormGroup.controls.name.hasError('required') && profilFormGroup.controls.name.hasError('minlength') && profilFormGroup.controls.name.hasError('maxlength') }">
+            Ime treba da sadrzi izmedju <strong>2</strong> i <strong>20</strong> karaktera.
+          </mat-error>
+          <mat-hint [ngClass]="{'show': controlGetter('name') }">
+            Ime i treba da sadrzi izmedju <strong>2</strong> i <strong>20</strong> karaktera.
+          </mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="data-mat-fields">
+          <mat-label>Prezime</mat-label>
+          <input matInput placeholder="Prezime" type="text" formControlName="surname" required>
+          <mat-error [ngClass]="{'show': profilFormGroup.controls.surname.hasError('required') && profilFormGroup.controls.surname.hasError('minlength') && !profilFormGroup.controls.surname.hasError('maxlength') }">
+            Prezime treba da sadrzi izmedju <strong>2</strong> i <strong>20</strong> karaktera.
+          </mat-error>
+          <mat-hint [ngClass]="{'show': controlGetter('surname') }">
+            Prezime treba da sadrzi izmedju <strong>2</strong> i <strong>20</strong> karaktera.
+          </mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="data-mat-fields">
+          <mat-label>Adresa</mat-label>
+          <input matInput placeholder="Adresa" type="text" formControlName="adress" required>
+          <mat-error [ngClass]="{'show': profilFormGroup.controls.adress.hasError('required') && profilFormGroup.controls.adress.hasError('minlength') && profilFormGroup.controls.adress.hasError('maxlength') }">
+            Adresa treba da sadrzi izmedju <strong>2</strong> i <strong>20</strong> karaktera.
+          </mat-error>
+          <mat-hint [ngClass]="{'show': controlGetter('adress') }">
+            Adresa treba da sadrzi izmedju <strong>2</strong> i <strong>20</strong> karaktera.
+          </mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="data-mat-fields">
+          <mat-label>E-mail</mat-label>
+          <input matInput placeholder="Adresa" type="text" formControlName="email" required>
+          <mat-error [ngClass]="{'show': profilFormGroup.controls.email.hasError('required') && profilFormGroup.controls.email.hasError('email') }">
+            Unesite validnu e-mail adresu.
+          </mat-error>
+          <mat-hint [ngClass]="{'show': controlGetter('email') }">
+            E-mail adresa je obavezna.
+          </mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="data-mat-fields">
+          <mat-label>Datum rodjenja</mat-label>
+          <input matInput [matDatepicker]="dp3" placeholder="Datum rodjenja" formControlName="date">
+          <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+          <mat-datepicker #dp3 disabled="false" color="primary" required></mat-datepicker>
+          <mat-error [ngClass]="{'show': !profilFormGroup.controls.date.hasError('required') }">
+            Obavezno je uneti datum rodjenja.
+          </mat-error>
+          <mat-hint [ngClass]="{'show': controlGetter('date') }">
+            Unesite datum rodjenja, ovo polje je obavezno.
+          </mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="data-mat-fields" *ngIf="role == 'AppUser'">
+          <mat-label>Tip korisnika</mat-label>
+          <mat-select disableOptionCentering (selectionChange)="selectChange($event)" formControlName="usertype" matNativeControl required>
+            <mat-option value="Obican" mat-select>Obican</mat-option>
+            <mat-option value="Student">Student/Djak</mat-option>
+            <mat-option value="Penzioner">Penzioner</mat-option>
+          </mat-select>
+          <mat-hint [ngClass]="{'show': controlGetter('usertype') }">
+            Izaberite koji ste tip korisnika, ovo polje je obavezno.
+          </mat-hint>
+          <mat-error [ngClass]="{'show': !profilFormGroup.controls.usertype.hasError('required') }">
+            Ovo polje je obavezno.
+          </mat-error>
+        </mat-form-field>
+        <div class="doc-div" *ngIf="role == 'AppUser'">
+          <h2 class="h2-center">Dokument</h2>
+          <img [src]="docUrl" *ngIf="docUrl">
+        </div>
+        <h3 class="h3-center" *ngIf="updateSuccess">
+          Izmene uspesno izvrsene
+        </h3>
+        <button mat-raised-button color="primary" class="login-button">Sacuvaj izmene</button>
+      </mat-card>
+      </form>
+      <mat-card *ngIf="role == 'AppUser'" class="mat-tickets">
+        <h2>Kupljene karte</h2>
+        <div *ngFor="let ticket of tickets">
+          <h3>
+            {{ticket.TicketType | titlecase}} karta
+          </h3>
+          <hr>
+          <h5>Cena (RSD/EUR)</h5>
+          <span>
+            <b>{{ticket.PriceRSD}}</b> RSD
+          </span>
+          <br>
+          <span>
+            <b>{{ticket.PayPalPaymentDetails.TransactionsAmountTotal}}</b> {{ticket.PayPalPaymentDetails.TransactionsAmountCurrency}}
+          </span>
+          <h4>
+            Kupljena: {{ticket.BoughtAt | date:'full'}}  
+          </h4>
+          <h4>
+            Istice: {{ticket.Expires | date:'full'}}
+          </h4>
+        </div>
+      </mat-card>
+    </div>
+    <div class="rightcolumn">
+      <form [formGroup]="changePasswordForumGroup">
+        <mat-card class="mat-password">
+          <h2 class="h2-center">Promena sifre</h2>
+          <mat-form-field appearance="outline" class="password-mat-fields">
+            <mat-label>Stara sifra</mat-label>
+            <input matInput placeholder="Old password" formControlName="oldPassword" [type]=" !hideOldPassword ? 'password' : 'text'"   required>
+            <mat-error *ngIf="oldPasswordInCorrect">
+              Uneta stara sifra se ne poklapa sa sifrom koja je u bazi, pokusajte ponovo.
+            </mat-error>
+            <button mat-icon-button matSuffix (click)="hideOldPassword = !hideOldPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideOldPassword">
+              <mat-icon>{{hideOldPassword ? 'visibility' : 'visibility_off'}}</mat-icon>
+            </button>
+          </mat-form-field>
+        <mat-form-field appearance="outline" class="password-mat-fields">
+          <mat-label>Nova sifra</mat-label>
+          <input matInput placeholder="Nova sifra" formControlName="password" [type]=" !hide ? 'password' : 'text'"   required>
+          <mat-error [ngClass]="{'show': changePasswordForumGroup.controls.password.hasError('required') && changePasswordForumGroup.controls.password.hasError('minlength') && changePasswordForumGroup.controls.password.hasError('maxlength') }">
+            Sifra treba da sadrzi izmedju <strong>6</strong> i <strong>25</strong> karaktera.
+          </mat-error>
+          <mat-hint [ngClass]="{'show': passwordGetter('password') }">
+            Sifra je obavezna i treba da sadrzi izmedju <strong>6</strong> i <strong>25</strong> karaktera.
+          </mat-hint>
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+          </button>
+        </mat-form-field>
+        <ng-template matStepLabel>Potvrdite unesenu sifru</ng-template>
+        <mat-form-field appearance="outline" class="password-mat-fields margin-top-10">
+          <mat-label>Potvrda sifre</mat-label>
+          <input matInput placeholder="Potvrdi gore unesenu sifru" formControlName="confirmPassword" [type]=" !hideConfirmed ? 'password' : 'text'"   required>
+          <mat-error [ngClass]="{'show': !validatePassword(passwordGetter('password'), passwordGetter('confirmPassword'))}">
+            Sifre se ne poklapaju, unesite validnu sifru.
+          </mat-error>
+          <button mat-icon-button matSuffix (click)="hideConfirmed = !hideConfirmed" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideConfirmed">
+            <mat-icon>{{hideConfirmed ? 'visibility' : 'visibility_off'}}</mat-icon>
+          </button>
+        </mat-form-field>
+        <b style="color:green" *ngIf="success">Uspesno promenjena sifra, sledeci login ce biti sa novom sifrom.</b>
+        <button mat-raised-button color="primary" class="login-button" type="submit" (click)="ChangePassword()">Promeni sifru</button>
+        </mat-card>
+      </form>
+      <mat-card *ngIf="role == 'AppUser'" style="margin-top: 30px;">
+        <h2 class="h2-center">Dostavi dokument za validaciju</h2>
+        <form>
+          <input mat-raised-button color="primary" type="file" (change)="onFileChanged($event)" accept="image/png,image/jpeg,image/jpg,image/bmp"/>
+          <div *ngIf="imgURL" style="margin-top: 20px;">
+            <img [src]="imgURL" class="margin-top-10"  width="50%" height="50%">
+            <button mat-raised-button color="primary" class="login-button" (click)="UploadPicture()">Postavi sliku</button>
+          </div>
+        </form>
+      </mat-card>
+    </div>
+  </div>
+</div>

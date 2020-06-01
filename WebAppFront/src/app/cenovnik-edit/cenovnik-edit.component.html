@@ -1,0 +1,51 @@
+<mat-card>
+  <form [formGroup]="editCenovnikFormGroup">
+    <h1 mat-dialog-title style="text-align: center;">Modifikuj cene postojeceg cenovnika</h1>
+    <div mat-dialog-content style="overflow: unset;">
+      <mat-form-field appearance="outline" style="display: block; margin-bottom: 15px;">
+        <mat-label>Vremenska karta (1h)</mat-label>
+        <input matInput placeholder="Vremenska karta" type="number" formControlName="regularna" required>
+        <mat-error [ngClass]="{ 'show': !editCenovnikFormGroup.controls.regularna.hasError('required') }">
+          Morate da unesete cenu za vremensku kartu
+        </mat-error>
+        <mat-error [ngClass]="{ 'show': editCenovnikFormGroup.controls.regularna.hasError('required') && !editCenovnikFormGroup.controls.regularna.hasError('minlength') && !editCenovnikFormGroup.controls.regularna.hasError('maxlength') }">
+          Cena mora biti od <b>50</b> do <b>150</b> RSD za vremensku kartu.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" style="display: block; margin-bottom: 15px;">
+        <mat-label>Dnevna karta</mat-label>
+        <input matInput placeholder="Dnevna karta" type="number" formControlName="dnevna" required>
+        <mat-error [ngClass]="{ 'show': !editCenovnikFormGroup.controls.dnevna.hasError('required') }">
+            Morate da unesete cenu za dnevnu kartu
+        </mat-error>
+        <mat-error [ngClass]="{ 'show': editCenovnikFormGroup.controls.dnevna.hasError('required') && !editCenovnikFormGroup.controls.dnevna.hasError('minlength') && !editCenovnikFormGroup.controls.dnevna.hasError('maxlength') }">
+          Cena mora biti od <b>50</b> do <b>300</b> RSD za dnevnu kartu.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" style="display: block; margin-bottom: 15px;">
+        <mat-label>Mesecna karta</mat-label>
+        <input matInput placeholder="Mesecna karta" type="number" formControlName="mesecna" required>
+        <mat-error [ngClass]="{ 'show': !editCenovnikFormGroup.controls.mesecna.hasError('required') }">
+          Morate da unesete cenu za mesecnu kartu
+        </mat-error>
+        <mat-error [ngClass]="{ 'show': editCenovnikFormGroup.controls.mesecna.hasError('required') && !editCenovnikFormGroup.controls.mesecna.hasError('minlength') && !editCenovnikFormGroup.controls.mesecna.hasError('maxlength') }">
+          Cena mora biti od <b>50</b> do <b>3500</b> RSD za mesecnu kartu.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" style="display: block; margin-bottom: 15px;">
+        <mat-label>Godisnja karta</mat-label>
+        <input matInput placeholder="Godisnja karta" type="number" formControlName="godisnja" required>
+        <mat-error [ngClass]="{ 'show': !editCenovnikFormGroup.controls.godisnja.hasError('required') }">
+          Morate da unesete cenu za godisnju kartu
+        </mat-error>
+        <mat-error [ngClass]="{ 'show': editCenovnikFormGroup.controls.godisnja.hasError('required') && !editCenovnikFormGroup.controls.godisnja.hasError('minlength') && !editCenovnikFormGroup.controls.godisnja.hasError('maxlength') }">
+          Cena mora biti od <b>50</b> do <b>20000</b> RSD za mesecnu kartu.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions style="margin-top: 20px;">
+        <button mat-raised-button color="primary" (click)="onNoClick()">Odustani</button>
+        <button mat-raised-button color="primary" [mat-dialog-close]="editCenovnikFormGroup.value" type="submit"  cdkFocusInitial>Sacuvaj nove cene</button>
+    </div>
+  </form>
+</mat-card>

@@ -1,0 +1,92 @@
+.highlight{
+    background: #0bdb15;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.lines {
+    height: 300px;
+    overflow-y: auto;
+    text-align: center;
+    scrollbar-3dlight-color: tomato;
+}
+
+th.mat-header-cell {
+    text-align: center;
+    font-size: 15px;
+}
+
+table {
+    width: 100%;
+}
+
+td {
+    cursor: pointer;
+}
+
+.td-not-allowed {
+    cursor: not-allowed;
+    background-color: rgb(199, 123, 123);
+}
+.td-not-allowed:active {
+    pointer-events: none;
+}
+.disabled {
+    background-color: rgb(199, 123, 123);
+    cursor: not-allowed;
+}
+.disabled:active {
+    pointer-events: none;
+}
+
+tr > th {
+    position: sticky;
+    top: -16px;
+    background: antiquewhite;
+    font-weight: bold;
+}
+
+div > button {
+    background-color: lightseagreen;
+    margin-right: 5px;
+}
+
+
+.example-h2 {
+    margin: 10px;
+}
+
+.example-section {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    height: 60px;
+    font-weight: bold;
+}
+
+.example-margin {
+    margin: 10px;
+    font-weight: bold;
+}
+
+.rightcolumn-paypal {
+    float: right;
+    position: sticky;
+    display: block;
+    margin-right: 100px;
+    top: 300px;
+    width: 20%;
+    padding-left: 60px;
+}
+
+.result {
+    width: 50%;
+    margin: 0 auto;
+}
+
+/* .leftcolumn-margin-center {
+    margin: 0 auto;
+    width: 60%;
+    padding-left: 10px;
+} */
+  

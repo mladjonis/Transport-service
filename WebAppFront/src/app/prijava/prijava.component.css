@@ -1,0 +1,59 @@
+mat-card {
+    top: 300px;
+    width: 60%;
+    margin: 0 auto;
+    animation: move 2s ease-out;
+}
+
+@keyframes move {
+    from { top: 0px;}
+    to {top: 200px;}
+}
+
+mat-form-field {
+    margin-top: 30px;
+    display: block;
+}
+
+.show {
+    display: none;
+}
+
+.h2-center {
+    text-align: center;
+}
+
+.login-button {
+    display: block;
+    margin: 0 auto;
+    font-size: 1.3em;
+    width: 30%;
+    border: 1px solid;
+    padding: 10px;
+    box-shadow: 5px 10px #888888;
+}
+
+.a-button {
+    overflow: visible;
+    width: auto;
+}
+.link {
+    font-family: "Verdana" sans-serif;
+    font-size: 1em;
+    text-align: left;
+    color: blue;
+    background: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    -moz-user-select: text;
+    margin-left: 5px;
+}
+.link .link-span {
+    text-decoration: underline;
+}
+.link:hover .link-span,
+.link:focus .link-span {
+    color: black;
+}

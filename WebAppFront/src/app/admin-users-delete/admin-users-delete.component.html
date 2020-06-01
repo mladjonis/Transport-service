@@ -1,0 +1,26 @@
+<h1 mat-dialog-title style="text-align: center;">Dodelite registrovanim korisnicima uloge</h1>
+<div mat-dialog-content style="overflow: unset;">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 lines">
+    <ng-container matColumnDef="Email">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let element" [ngClass] = "{'td-not-allowed': !element.Clickable}"> {{element.Email}} </td>
+    </ng-container>
+    <ng-container matColumnDef="Role">
+        <th mat-header-cell *matHeaderCellDef> Dodeljena uloga </th>
+        <td mat-cell *matCellDef="let element" [ngClass] = "{'td-not-allowed': !element.Clickable}"> {{element.Role}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': row.Selected, 'disabled': !row.Clickable }"  (click)="selectLine(row)"></tr>
+  </table>
+
+  <div *ngFor="let selected of selectedRows" class="day-buttons">
+    <div class="card">
+      <div class="fakeimg">Izabrani korisnik: {{selected.Email}}</div>
+      <button mat-flat-button color="primary" (click)="RemoveUser(selected)">Izbrisi korisnika</button>
+    </div>
+  </div>
+  <div mat-dialog-actions style="margin-top: 20px;">
+    <button mat-raised-button color="primary" (click)="onNoClick()" cdkFocusInitial>Odustani</button>
+  </div>
+</div>

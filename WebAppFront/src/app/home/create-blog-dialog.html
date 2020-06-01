@@ -1,0 +1,26 @@
+<mat-card style="height: 100%;">
+    <form [formGroup]="createBlogFormGroup">
+        <h1 mat-dialog-title>Postavi novi blog post</h1>
+        <div mat-dialog-content style="margin-top: 25px;">
+            <mat-form-field appearance="outline" style="display: block;">
+                <mat-label>Naslov bloga</mat-label>
+                <input matInput placeholder="Naslov" type="text" formControlName="title" required>
+                <mat-error [ngClass]="{ 'show': createBlogFormGroup.controls.title.hasError('required') }">
+                    Naslov je obavezan
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" style="display: block;">
+                <mat-label>Sadrzaj bloga</mat-label>
+                <textarea matInput placeholder="Sadrzaj bloga" cols="50" rows="5" formControlName="content" required></textarea>
+                <mat-error [ngClass]="{ 'show': createBlogFormGroup.controls.content.hasError('required') }">
+                    Sadrzaj je obavezan
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div mat-dialog-actions style="margin-top: 20px;">
+            <button mat-raised-button color="primary" (click)="onNoClick()">Odustani</button>
+            <!--(click)="Submit()-->
+            <button mat-raised-button color="primary" [mat-dialog-close]="createBlogFormGroup.value" type="submit"  cdkFocusInitial>Kreiraj blog</button>
+        </div>
+    </form> 
+</mat-card>

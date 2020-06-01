@@ -1,0 +1,34 @@
+<h1 mat-dialog-title style="text-align: center;">Brisanje prethodnih cenovnika</h1>
+<div mat-dialog-content style="overflow: unset;">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="From">
+      <th mat-header-cell *matHeaderCellDef> Vazio od</th>
+      <td mat-cell *matCellDef="let element"> {{element.From | date: 'full'}} </td>
+    </ng-container>
+    <ng-container matColumnDef="To">
+        <th mat-header-cell *matHeaderCellDef> Vazio do </th>
+        <td mat-cell *matCellDef="let element"> {{element.To | date: 'full'}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': row.Selected}"  (click)="selectPricelist(row)"></tr>
+  </table>
+
+  <div *ngFor="let selected of selectedRows" class="day-buttons">
+    <div class="card">
+      <button mat-flat-button [mat-dialog-close]="selected" (click)="DeletePricelist(selected)">Obrisi cenovnik</button>
+        <mat-expansion-panel style="box-shadow: black; outline-width: 5px; margin-top: 8px;" [expanded]="true">
+          <mat-expansion-panel-header>
+            Cene za izabrani cenovnik
+          </mat-expansion-panel-header>
+         <div *ngFor="let pf of selected.PriceFinals">
+           <b>{{pf.Price}} RSD</b> || <b>{{pf.Ticket.TicketType | titlecase}}</b>
+           <br>
+         </div>
+        </mat-expansion-panel>  
+    </div>
+  </div>
+  <div mat-dialog-actions style="margin-top: 20px;">
+    <button mat-raised-button color="primary" (click)="onNoClick()" cdkFocusInitial>Odustani</button>
+  </div>
+</div>

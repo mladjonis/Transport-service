@@ -1,0 +1,60 @@
+.highlight{
+    background: #fac344;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.show {
+    display: none;
+}
+
+
+th.mat-header-cell {
+    text-align: center;
+    font-size: 15px;
+}
+
+table {
+    width: 100%;
+}
+
+td {
+    cursor: pointer;
+}
+
+tr > th {
+    position: sticky;
+    top: -16px;
+    background: antiquewhite;
+    font-weight: bold;
+}
+
+.lines {
+    height: 300px;
+    overflow-y: auto;
+    text-align: center;
+    scrollbar-3dlight-color: tomato;
+}
+
+.td-not-allowed {
+    cursor: not-allowed;
+    background-color: rgb(199, 123, 123);
+}
+.td-not-allowed:active {
+    pointer-events: none;
+}
+.disabled {
+    background-color: rgb(199, 123, 123);
+    cursor: not-allowed;
+}
+.disabled:active {
+    pointer-events: none;
+}
+
+mat-expansion-panel-header {
+    background-color: darkcyan;
+}
+
+.day-buttons {
+    text-align: center;
+}

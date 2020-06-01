@@ -1,0 +1,227 @@
+<form [formGroup]="registerFormGroup">
+  <mat-card>
+  <h2>Registracija</h2>
+  <mat-vertical-stepper formArrayName="formArray" linear #stepper>
+    <mat-step formGroupName="0" [stepControl]="registerFormGroup.controls.formArray.get([0])" state="username">
+      <ng-template matStepLabel>Unesite ime</ng-template>
+      <mat-form-field appearance="outline">
+        <mat-label>Ime</mat-label>
+        <input matInput placeholder="Ime" type="text" formControlName="name" required>
+        <mat-error [ngClass]="{'show': registerFormGroup.controls.formArray.get([0]).hasError('required') && !registerFormGroup.controls.formArray.get([0]).hasError('minlength') && !registerFormGroup.controls.formArray.get([0]).hasError('maxlength') }">
+          Ime treba da sadrzi izmedju <strong>2</strong> i <strong>20</strong> karaktera.
+        </mat-error>
+        <mat-hint [ngClass]="{'show': controlGetter(0,'name') }">
+          Ime je obavezno i treba da sadrzi izmedju <strong>2</strong> i <strong>20</strong> karaktera.
+        </mat-hint>
+      </mat-form-field>
+    <div>
+      <button mat-mini-fab color="primary" matStepperNext type="button">
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+    </div>
+    </mat-step>
+    <mat-step formGroupName="1" [stepControl]="registerFormGroup.controls.formArray.get([1])" state="username">
+      <ng-template matStepLabel>Unesite prezime</ng-template>
+      <mat-form-field appearance="outline">
+        <mat-label>Prezime</mat-label>
+        <input matInput placeholder="Prezime" type="text" formControlName="surname"   required>
+        <mat-error [ngClass]="{'show': registerFormGroup.controls.formArray.get([1]).hasError('required') && !registerFormGroup.controls.formArray.get([1]).hasError('minlength') && !registerFormGroup.controls.formArray.get([1]).hasError('maxlength') }">
+          Prezime treba da sadrzi izmedju <strong>2</strong> i <strong>20</strong> karaktera.
+        </mat-error>
+        <mat-hint [ngClass]="{'show': controlGetter(1,'surname')}">
+          Prezime je obavezno i treba da sadrzi izmedju <strong>2</strong> i <strong>20</strong> karaktera.
+        </mat-hint>
+      </mat-form-field>
+      <div>
+        <button mat-mini-fab color="primary" matStepperPrevious type="button" class="button-slider-margin">
+          <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" matStepperNext type="button">
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+      </div>
+    </mat-step>
+    <mat-step formGroupName="2" [stepControl]="registerFormGroup.controls.formArray.get([2])" state="address">
+      <ng-template matStepLabel>Unesite adresu</ng-template>
+      <mat-form-field appearance="outline">
+        <mat-label>Adresa</mat-label>
+        <input matInput placeholder="Adresa" type="text" formControlName="address"   required>
+        <mat-error [ngClass]="{'show': registerFormGroup.controls.formArray.get([2]).hasError('required') && !registerFormGroup.controls.formArray.get([2]).hasError('minlength') && !registerFormGroup.controls.formArray.get([2]).hasError('maxlength') }">
+          Adresa treba da sadrzi izmedju <strong>2</strong> i <strong>25</strong> karaktera.
+        </mat-error>
+        <mat-hint [ngClass]="{'show': controlGetter(2,'address') }">
+          Adresa je obavezna i treba da sadrzi izmedju <strong>2</strong> i <strong>25</strong> karaktera.
+        </mat-hint>
+      </mat-form-field>
+      <div>
+        <button mat-mini-fab color="primary" matStepperPrevious type="button" class="button-slider-margin">
+          <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" matStepperNext type="button">
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+      </div>
+    </mat-step>
+    <mat-step formGroupName="3" [stepControl]="registerFormGroup.controls.formArray.get([3])" state="email">
+      <ng-template matStepLabel>Unesite e-mail adresu</ng-template>
+      <mat-form-field appearance="outline">
+        <mat-label>E-mail</mat-label>
+        <input matInput placeholder="E-mail address" type="email" formControlName="email"   required>
+        <mat-error [ngClass]="{'show': registerFormGroup.controls.formArray.get([3]).hasError('required') && !registerFormGroup.controls.formArray.get([3]).hasError('email') }">
+          Unesite validnu e-mail adresu.
+        </mat-error>
+        <mat-error *ngIf="userExists">
+          Korisnik sa prethodno unetom e-mail adresom vec postoji, probajte drugu adresu.
+        </mat-error>
+        <mat-hint [ngClass]="{'show': controlGetter(3,'email') }">
+          E-mail adresa je obavezna.
+        </mat-hint>
+      </mat-form-field>
+      <div>
+        <button mat-mini-fab color="primary" matStepperPrevious type="button" class="button-slider-margin">
+          <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" matStepperNext type="button">
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+      </div>
+    </mat-step>
+    <mat-step formGroupName="4" [stepControl]="registerFormGroup.controls.formArray.get([4])" state="password">
+      <ng-template matStepLabel>Unesite sifru</ng-template>
+      <mat-form-field appearance="outline">
+        <mat-label>Sifra</mat-label>
+        <input matInput placeholder="Password" formControlName="password" [type]=" !hide ? 'password' : 'text'"   required>
+        <mat-error [ngClass]="{'show': registerFormGroup.controls.formArray.get([4]).hasError('required') && !registerFormGroup.controls.formArray.get([4]).hasError('minlength') && !registerFormGroup.controls.formArray.get([4]).hasError('maxlength') }">
+          Sifra treba da sadrzi izmedju <strong>5</strong> i <strong>25</strong> karaktera.
+        </mat-error>
+        <mat-hint [ngClass]="{'show': controlGetter(4,'password') }">
+          Sifra je obavezna i treba da sadrzi izmedju <strong>5</strong> i <strong>25</strong> karaktera.
+        </mat-hint>
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+        </button>
+      </mat-form-field>
+      <ng-template matStepLabel>Potvrdite unesenu sifru</ng-template>
+      <mat-form-field appearance="outline" style="margin-top: 7px;">
+        <mat-label>Potvrda sifre</mat-label>
+        <input matInput placeholder="Confirm password" formControlName="confirmPassword" [type]=" !hide2 ? 'password' : 'text'"   required>
+        <mat-error [ngClass]="{'show': validatePassword(registerFormGroup.controls.formArray.get([4]).get('password').value,registerFormGroup.controls.formArray.get([4]).get('confirmPassword').value)}">
+          Sifre se ne poklapaju, unesite validnu sifru.
+        </mat-error>
+        <button mat-icon-button matSuffix (click)="hide2 = !hide2" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide2">
+          <mat-icon>{{hide2 ? 'visibility' : 'visibility_off'}}</mat-icon>
+        </button>
+      </mat-form-field>
+      <div>
+        <button mat-mini-fab color="primary" matStepperPrevious type="button" class="button-slider-margin">
+          <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" matStepperNext type="button">
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+      </div>
+    </mat-step>
+    <mat-step formGroupName="5" [stepControl]="registerFormGroup.controls.formArray.get([5])" state="calendar">
+      <ng-template matStepLabel>Unesite datum rodjenja</ng-template>
+      <mat-form-field appearance="outline">
+        <mat-label>Datum rodjenja</mat-label>
+        <!-- <input matInput placeholder="Datum rodjenja" type="date" formControlName="date"   required> -->
+        <input matInput [matDatepicker]="dp3" placeholder="Datum rodjenja" formControlName="date" aria-disabled="true">
+        <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+        <mat-datepicker #dp3 disabled="false" color="primary" required></mat-datepicker>
+        <mat-error [ngClass]="{'show': registerFormGroup.controls.formArray.get([5]).hasError('required') }">
+          Obavezno je uneti datum rodjenja.
+        </mat-error>
+        <mat-hint [ngClass]="{'show': controlGetter(5,'date') }">
+          Unesite datum rodjenja, ovo polje je obavezno.
+        </mat-hint>
+      </mat-form-field>
+      <div>
+        <button mat-mini-fab color="primary" matStepperPrevious type="button" class="button-slider-margin">
+          <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" matStepperNext type="button">
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+      </div>
+    </mat-step>
+    <mat-step formGroupName="6" [stepControl]="registerFormGroup.controls.formArray.get([6])" state="usertype">
+      <ng-template matStepLabel>Odaberite koji ste tip korisnika</ng-template>
+      <mat-form-field appearance="outline">
+        <mat-label>Tip korisnika</mat-label>
+        <mat-select disableOptionCentering (selectionChange)="selectChange($event)" formControlName="usertype" matNativeControl required>
+          <mat-option value="Obican" mat-select>Obican</mat-option>
+          <mat-option value="Student">Student/Djak</mat-option>
+          <mat-option value="Penzioner">Penzioner</mat-option>
+        </mat-select>
+        <mat-hint [ngClass]="{'show': controlGetter(6,'usertype') }">
+          Izaberite koji ste tip korisnika, ovo polje je obavezno.
+        </mat-hint>
+        <mat-error [ngClass]="{'show': registerFormGroup.controls.formArray.get([6]).hasError('required') }">
+          Ovo polje je obavezno.
+        </mat-error>
+      </mat-form-field>
+      <div>
+        <button mat-mini-fab color="primary" matStepperPrevious type="button" class="button-slider-margin">
+          <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" matStepperNext type="button">
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+      </div>
+    </mat-step>
+    <mat-step formGroupName="7" [stepControl]="registerFormGroup.controls.formArray.get([7])" [optional]="true" state="doc">
+      <ng-template matStepLabel>Izaberite dokument za validaciju</ng-template>
+      <div>Dokument</div>
+      <input mat-raised-button color="primary" type="file" formControlNmae="doc" (change)="onFileChanged($event)" accept="image/png,image/jpeg,image/jpg,image/bmp"/>
+      <img [src]="imgURL" class="margin-top-10" width="100%" height="auto" *ngIf="imgURL">
+      <div>
+        <button mat-mini-fab color="primary" matStepperPrevious type="button" class="button-slider-margin">
+          <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" matStepperNext type="button">
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+      </div>
+    </mat-step>
+    <mat-step state="finish">
+      <ng-template matStepLabel>Zavrsni korak registracije</ng-template>
+      <div>
+        <button mat-mini-fab color="primary" matStepperPrevious class="button-slider-margin">
+          <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+        <button mat-raised-button color="primary" type="submit" (click)="Submit()">
+          Posalji
+        </button>
+        <b style="color: green; margin-top: 10px;" *ngIf="success">Uspesna registracija, proverite email za potvrdu istog! Bicete prebaceni na login stranicu za 4 sekunde</b>
+      </div>
+
+    </mat-step>
+
+    <ng-template matStepperIcon="username">
+      <mat-icon>perm_identity</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="address">
+      <mat-icon>room</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="email">
+      <mat-icon>alternate_email</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="password">
+      <mat-icon>visibility_off</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="calendar">
+      <mat-icon>today</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="usertype">
+      <mat-icon>toc</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="doc">
+      <mat-icon>perm_media</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="finish">
+      <mat-icon>done_outline</mat-icon>
+    </ng-template>
+  </mat-vertical-stepper>
+</mat-card>
+</form>

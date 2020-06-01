@@ -1,0 +1,63 @@
+.data-mat-fields {
+    margin-top: 8px;
+    width: 45%;
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+.h3-center {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-size: large;
+    color: green;
+    font-weight: bold;
+}
+.password-mat-fields {
+    width: auto;
+    margin-top: 25px;
+    display: block;
+}
+
+.mat-password {
+    margin-left: -20px;
+}
+
+.mat-tickets {
+    margin-top: 30px;
+}
+
+.show {
+    display: none;
+}
+
+.h2-center {
+    text-align: center;
+}
+
+.leftcolumn-margin-center {
+    margin: 0 auto;
+    width: 60%;
+    padding-left: 10px;
+}
+
+.login-button {
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+    font-size: 1.3em;
+    width: 40%;
+    border: 1px solid;
+    padding: 10px;
+    box-shadow: 5px 10px #888888;
+}
+
+.doc-div {
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 12px;
+}
+
+.input-margin {
+    margin-top: 10px;
+}

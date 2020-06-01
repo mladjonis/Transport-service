@@ -1,0 +1,24 @@
+.delete-article {
+    float: right;
+    margin-top: -2px;
+    margin-left: 8px;
+    text-align: center;
+    font-style: normal;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.edit-article {
+    float: right;
+    margin-left: 20px;
+    text-align: center;
+    font-style: normal;
+    height: 16px;
+    cursor: pointer;
+}
+
+.mat-create-blog {
+    width: min-content;
+    margin-left: 10px;
+}

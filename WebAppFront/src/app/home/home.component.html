@@ -1,0 +1,45 @@
+<div class="content">
+  <div class="row">
+    <mat-card class="mat-create-blog" *ngIf=" role == 'Admin'">
+      <button mat-raised-button color="primary" (click)="openDialog()">Kreiraj novi blog post</button>
+    </mat-card>
+    <div class="leftcolumn">
+      <div class="card" *ngFor="let data of blogs">
+        <a class="delete-article" title="Izbrisi" *ngIf="role == 'Admin'" (click)="Delete(data.ID)">&#10006;</a>
+        <a class="edit-article" title="Izmeni" *ngIf="role == 'Admin'" (click)="Edit(data.ID)">Izmeni</a>
+        <h2>{{data.Title}}</h2><!--naslov-->
+        <h5>{{data.PublishedAt | date:'mediumDate'}} ,postavio: {{data.UserID}}</h5><!--autor datum vreme-->
+        <div class="fakeimg">
+          <img src="../../assets/obavestenje.jpg" alt="picture not available">
+        </div>
+        <div class="container" [id]="data.ID" [class.show]="data.visible"  *ngIf=" role == 'Admin'; else notAdmin" contenteditable="true">
+          {{data.BlogText}}<!--sadrzaj-->
+        </div>
+        <ng-template #notAdmin>
+          <div class="container" [class.show]="data.visible">
+            {{data.BlogText}}<!--sadrzaj-->
+          </div>
+        </ng-template>
+        <a *ngIf="data.BlogText.length > 200" [name]="data.ID" href="javascript:;" (click)="data.visible = !data.visible">{{ data.visible ? 'Prikazi manje': 'Prikazi sve' }}</a>
+      </div>
+    </div>
+   <!--pri pustanju u rad otkomentarisati ifframove-->
+    <div class="rightcolumn">
+      <mat-card>
+        <h3>Popularne stranice za obavestavanje gradjana</h3>
+      </mat-card>
+      <div class="card2">
+        <p>021</p>
+        <div class="fakeimg2">
+          <iframe src="https://www.021.rs/"></iframe>
+        </div><br>
+      </div>
+      <div class="card2">
+        <p>Moj Novi Sad</p>
+        <div class="fakeimg2">
+          <iframe src="http://www.mojnovisad.com/"></iframe>
+        </div><br>
+      </div>
+    </div>
+  </div>
+</div>

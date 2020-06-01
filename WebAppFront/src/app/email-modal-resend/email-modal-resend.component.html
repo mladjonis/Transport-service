@@ -1,0 +1,15 @@
+<form [formGroup]="emailConfirmationFormGroup"> 
+  <h2 style="text-align: center;">Forma za ponovno slanje potvrde e-mail-a</h2>
+  <mat-form-field appearance="outline">
+    <mat-label>Email</mat-label>
+    <input matInput placeholder="Email"  type="email" formControlName="email" required>
+    <mat-error [ngClass]="{'show': emailConfirmationFormGroup.controls.email.hasError('required') && emailConfirmationFormGroup.controls.email.hasError('email') }">
+      Unesite validnu e-mail adresu.
+    </mat-error>
+    <mat-hint [ngClass]="{'show': emailConfirmationFormGroup.controls.email.hasError('required') }">
+      E-mail je obavezno polje.
+    </mat-hint>
+  </mat-form-field>
+  <button mat-raised-button color="primary" class="resend-button" (click)="ResendConfirmationEmail()">Posalji e-mail za potvrdu</button>
+  <mat-hint style="color: green;" *ngIf="success">Uspesno poslat e-mail, proverite inbox</mat-hint>
+</form>

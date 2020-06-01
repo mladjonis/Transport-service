@@ -1,0 +1,42 @@
+form {
+    margin-top: 150px;
+}
+
+.show {
+    display: none;
+}
+
+mat-form-field {
+    width: 270px;
+}
+mat-error {
+    text-align: left;
+}
+
+mat-vertical-stepper {
+    width: 60%;
+    margin: 0 auto;
+    margin-bottom: 60px;
+    border-radius: 25px;
+    box-shadow: inset 3px 3px 14px 6px #171b1b;
+
+}
+mat-card {
+    background-color: transparent;
+}
+
+.mat-stepper-vertical-line::before {
+    border-left-color: rgba(0,0,0,.87);
+}
+
+h2 {
+    text-align: center;
+}
+
+.button-slider-margin {
+    margin-right: 10px;
+}
+
+button {
+    margin-top: 20px;
+}

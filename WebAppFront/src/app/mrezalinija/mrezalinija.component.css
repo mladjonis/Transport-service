@@ -1,0 +1,50 @@
+.leftcolumn {
+  width: 30%;
+}
+
+th.mat-header-cell {
+  text-align: center;
+  font-size: 15px;
+}
+
+table {
+  width: 100%;
+}
+
+td {
+  cursor: pointer;
+}
+
+tr > th {
+  position: sticky;
+  top: -16px;
+  background: rgba(197, 209, 23, 0.534);
+  font-weight: bold;
+}
+
+.map {
+  width:63%; 
+  height:590px; 
+  float:right;
+  outline-style: outset;
+}
+
+.highlight{
+  background: #11a9cf;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.lines {
+  height: 250px;
+  overflow-y: auto;
+  text-align: center;
+}
+
+.legend {
+  margin-top: 20px;
+  font-size: 1.3em; 
+  text-align: center; 
+  border-radius: 20px; 
+  font-style: italic;
+}

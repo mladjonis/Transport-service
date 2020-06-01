@@ -1,0 +1,34 @@
+.highlight{
+    background: #fac344;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+th.mat-header-cell {
+    text-align: center;
+    font-size: 15px;
+}
+
+table {
+    width: 100%;
+}
+
+td {
+    cursor: pointer;
+}
+
+tr > th {
+    position: sticky;
+    top: -16px;
+    background: antiquewhite;
+    font-weight: bold;
+}
+
+mat-expansion-panel-header {
+    background-color: darkcyan;
+}
+
+.day-buttons {
+    text-align: center;
+}

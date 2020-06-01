@@ -1,0 +1,57 @@
+<div class="card">
+  <h3 style="text-align: center;">Admin panel za linije i stanice</h3>
+  <div class="fakeimg lines">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="TransportLineID">
+        <th mat-header-cell *matHeaderCellDef> Smer </th>
+        <td mat-cell *matCellDef="let element"  [ngClass] = "{'td-not-allowed': !element.Clickable}"> {{element.TransportLineID}} </td>
+      </ng-container>
+      <ng-container matColumnDef="FromTo">
+          <th mat-header-cell *matHeaderCellDef> Linija </th>
+          <td mat-cell *matCellDef="let element" [ngClass] = "{'td-not-allowed': !element.Clickable}"> {{element.FromTo}} </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': row.Selected, 'disabled': !row.Clickable}"  (click)="selectLine(row)"></tr>
+    </table>
+  </div>
+</div>
+<div *ngIf="selectedRows.length > 0">
+  <h4 class="center-h">Dugmad za operacije sa mapom</h4>
+  <form [formGroup]="stationFormGroup">
+    <mat-form-field appearance="outline" style="display: block; padding: 4px;">
+      <mat-label>Unesite ime stanice koju zelite da napravite</mat-label>
+    <input matInput type="text" formControlName="name" required/>
+    <mat-error [ngClass]="{ 'show': !stationFormGroup.controls.name.hasError('required') }">
+      Morate da unesete ime stanice
+    </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="map-buttons" (click)="AddStation()">Dodaj stanicu na izabranu liniju</button>
+  </form>
+  <button mat-raised-button color="primary" class="map-buttons" (click)="EditLine()">Sacuvaj promene linije i stanica</button>
+  <b id="bsuccess" style="color: green;" [ngClass]="{ 'show': Success }">Promene uspesno izvresene, mozete da nastavite izmene na postojecoj liniji ili da izabere drugu iz ponudjene tabele.</b>
+  <button mat-raised-button color="primary" class="map-buttons" (click)="DeleteLine()">Obrisi izabranu liniju</button>
+</div>
+<div style=" border: 2px solid black; width:103% " *ngIf="selectedRows.length == 0">
+  <h4 class="center-h">Dugmad za operacije sa mapom - dodavanje nove linije</h4>
+  <form [formGroup]="lineFormGroup">
+    <mat-form-field appearance="outline" style="display: block; padding: 4px;">
+      <mat-label>Unesite smer linije</mat-label>
+    <input matInput type="text" formControlName="direction" required/>
+    <mat-error [ngClass]="{ 'show': !lineFormGroup.controls.direction.hasError('required') }">
+      Morate da unesete smer linije
+    </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" style="display: block; padding: 4px;">
+      <mat-label>Unesite ime linije (od-do pravac)</mat-label>
+    <input matInput type="text" formControlName="fromTo" required/>
+    <mat-error [ngClass]="{ 'show': !lineFormGroup.controls.fromTo.hasError('required') }">
+      Morate da unesete ime linije
+    </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="map-buttons" (click)="AddLine()">Dodaj liniju</button>
+    <!-- <button mat-raised-button color="primary" class="map-buttons" (click)="SaveLine()">Sacuvaj novododatu liniju</button> -->
+  </form>
+</div>
+<div #map class="map"></div>
+<button mat-raised-button color="primary" (click)="onNoClick()" cdkFocusInitial>Odustani</button>
+

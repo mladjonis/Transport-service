@@ -1,0 +1,40 @@
+<mat-card>
+  <form [formGroup]="createCenovnikFormGroup">
+    <h1 mat-dialog-title style="text-align: center;">Napravi novi cenovnik</h1>
+    <div mat-dialog-content style="overflow: unset;">
+      <h5>Cenovnik ce da vazi od tanasnjeg datuma {{today | date: 'full' }}</h5>
+      <mat-form-field appearance="outline" style="display: block;">
+        <mat-label>Vremenska karta (1h)</mat-label>
+        <input matInput placeholder="Vremenska karta" type="number" formControlName="regularna" required>
+        <mat-error [ngClass]="{ 'show': !createCenovnikFormGroup.controls.regularna.hasError('required') }">
+            Morate da unesete cenu za vremensku kartu
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" style="display: block;">
+        <mat-label>Dnevna karta</mat-label>
+        <input matInput placeholder="Dnevna karta" type="number" formControlName="dnevna" required>
+        <mat-error [ngClass]="{ 'show': !createCenovnikFormGroup.controls.dnevna.hasError('required') }">
+            Morate da unesete cenu za dnevnu kartu
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" style="display: block;">
+        <mat-label>Mesecna karta</mat-label>
+        <input matInput placeholder="Mesecna karta" type="number" formControlName="mesecna" required>
+        <mat-error [ngClass]="{ 'show': !createCenovnikFormGroup.controls.mesecna.hasError('required') }">
+            Morate da unesete cenu za mesecnu kartu
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" style="display: block;">
+        <mat-label>Godisnja karta</mat-label>
+        <input matInput placeholder="Godisnja karta" type="number" formControlName="godisnja" required>
+        <mat-error [ngClass]="{ 'show': !createCenovnikFormGroup.controls.godisnja.hasError('required') }">
+            Morate da unesete cenu za godisnju kartu
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions style="margin-top: 20px;">
+        <button mat-raised-button color="primary" (click)="onNoClick()">Odustani</button>
+        <button mat-raised-button color="primary" [mat-dialog-close]="createCenovnikFormGroup.value" type="submit"  cdkFocusInitial>Napravi novi cenovnik</button>
+    </div>
+  </form>
+</mat-card>

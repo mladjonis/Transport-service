@@ -1,0 +1,42 @@
+<h1 mat-dialog-title style="text-align: center;">Izbrisite izabrani red voznje</h1>
+<div mat-dialog-content style="overflow: unset;">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 lines">
+    <ng-container matColumnDef="TransportLineID">
+      <th mat-header-cell *matHeaderCellDef> Smer </th>
+      <td mat-cell *matCellDef="let element"> {{element.TransportLineID}} </td>
+    </ng-container>
+    <ng-container matColumnDef="FromTo">
+        <th mat-header-cell *matHeaderCellDef> Linija </th>
+        <td mat-cell *matCellDef="let element"> {{element.TransportLines.FromTo}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': row.Selected }"  (click)="selectLine(row)"></tr>
+  </table>
+
+  <div *ngFor="let selected of selectedRows" class="day-buttons">
+    <div class="card">
+      <div class="card">
+        <button mat-flat-button color="primary" (click)="selectDay(selected,'Radni_dan')">Radni dan</button>
+        <button mat-flat-button color="primary" (click)="selectDay(selected,'Subota')">Subota</button>
+        <button mat-flat-button color="primary" (click)="selectDay(selected,'Nedelja')">Nedelja</button>
+        <mat-expansion-panel style="box-shadow: black; outline-width: 5px; margin-top: 8px;" [expanded]="true">
+          <mat-expansion-panel-header>
+            Vremena polazaka iz baze podataka za izabranu liniju
+          </mat-expansion-panel-header>
+          <div *ngIf="selected.Day">
+            <div style="font-size: 1.2em; font-weight: 700;">{{selected.Day | replace : '_' : ' '}}</div>
+            <hr>
+            <div *ngFor="let time of timetable(selected,selected.Day)" class="time-div">
+              <b>{{time}}</b>
+            </div>
+          </div>
+        </mat-expansion-panel>  
+      </div>
+      <button mat-flat-button color="primary"  (click)="DeleteRedvoznje(selected)">Izbrisi selektovani red voznje</button>
+    </div>
+  </div>
+  <div mat-dialog-actions style="margin-top: 20px;">
+    <button mat-raised-button color="primary" (click)="onNoClick()" cdkFocusInitial>Odustani</button>
+  </div>
+</div>

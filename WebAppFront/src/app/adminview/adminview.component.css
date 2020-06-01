@@ -1,0 +1,13 @@
+.admin-buttons {
+	display: block; 
+	width: 55%;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	margin: 0 auto; 
+}
+
+.admin-mat {
+	margin-top: 20%; 
+	width: fit-content; 
+	margin-left: 40%;
+}

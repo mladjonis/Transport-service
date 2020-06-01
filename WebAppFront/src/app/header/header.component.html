@@ -1,0 +1,13 @@
+<mat-toolbar>
+    <button mat-icon-button routerLink="/" matTooltip="Pocetna" matTooltipPosition="before"><mat-icon>home</mat-icon></button>
+    <button mat-raised-button routerLink="/redvoznje" >Red voznje</button>
+    <button mat-raised-button routerLink="/mrezalinija">Mreza linija</button>
+    <button mat-raised-button routerLink="/cenovnik">Cenovnik</button>
+    <button mat-raised-button routerLink="/prijava" *ngIf="!isUserLoggedIn">Prijava</button>
+    <button mat-raised-button routerLink="/registracija" *ngIf="!role">Registracija</button>
+    <!-- -->
+    <button mat-raised-button routerLink="/adminview" *ngIf="role == 'Admin'">Administrator</button>
+    <button mat-raised-button routerLink="/verify-user" *ngIf="role == 'Controller'">Kontrolor</button>
+    <button mat-raised-button routerLink="/profil" *ngIf="role">Profil</button>
+    <button mat-raised-button (click)="LogOut()" *ngIf="isUserLoggedIn">Prijavljeni ste kao {{name}}, klikni za odjavu</button>
+</mat-toolbar>

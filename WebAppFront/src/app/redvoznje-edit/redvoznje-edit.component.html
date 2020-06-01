@@ -1,0 +1,63 @@
+<h1 mat-dialog-title style="text-align: center;">Izmenite red voznje za liniju</h1>
+<div mat-dialog-content style="overflow: unset;">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 lines">
+    <ng-container matColumnDef="TransportLineID">
+      <th mat-header-cell *matHeaderCellDef> Smer </th>
+      <td mat-cell *matCellDef="let element" [ngClass] = "{'td-not-allowed': !element.Clickable}"> {{element.TransportLineID}} </td>
+    </ng-container>
+    <ng-container matColumnDef="FromTo">
+        <th mat-header-cell *matHeaderCellDef> Linija </th>
+        <td mat-cell *matCellDef="let element" [ngClass] = "{'td-not-allowed': !element.Clickable}"> {{element.TransportLines.FromTo}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': row.Selected, 'disabled': !row.Clickable}"  (click)="selectLine(row)"></tr>
+  </table>
+
+  <div *ngFor="let selected of selectedRows" class="day-buttons">
+    <div class="card">
+        <form [formGroup]="editRedvoznjeFormGroup">
+          <mat-form-field appearance="outline" style="display: block;">
+            <mat-label>Unesite vreme</mat-label>
+          <input matInput type="time" formControlName="time" required/>
+          <mat-error [ngClass]="{ 'show': !editRedvoznjeFormGroup.controls.time.hasError('required') }">
+            Morate da unesete vreme
+          </mat-error>
+          </mat-form-field>
+          <button mat-flat-button color="primary" (click)="AddTime(editRedvoznjeFormGroup.controls.time.value)">Dodaj uneseno vreme</button>
+          <hr>
+          <h5>Dani:</h5>
+          <mat-checkbox checked="false" formControlName="radni" style="display: block;">Radni dan</mat-checkbox>
+          <mat-checkbox checked="false" formControlName="subota" style="display: block;">Subota</mat-checkbox>
+          <mat-checkbox checked="false" formControlName="nedelja" style="display: block;">Nedelja</mat-checkbox>
+          <mat-error [ngClass]="{ 'show': editRedvoznjeFormGroup.hasError('daysInvalid') }">Morate da odabere bar jedan dan da bi se vremena sacuvala</mat-error>
+          <div *ngIf="checkBoxArray.length > 0">
+            <h4>Unesena vremena:</h4>
+            <b>* ako zelite da neko vreme izbrisete iz konacnog unosenja kliknite na kvacicu da otkvacite</b>
+            <mat-checkbox *ngFor="let time of checkBoxArray" (click)="CheckBoxToggle(time)" style="display: block;" checked="true">{{time}}</mat-checkbox>
+          </div>
+          <!--OVO CE BITI ZA EDIT-->
+          <div class="card">
+            <button mat-flat-button color="primary" style="margin-left: 5px;" (click)="selectDay(selected,'Radni_dan')">Radni dan</button>
+            <button mat-flat-button color="primary" (click)="selectDay(selected,'Subota')">Subota</button>
+            <button mat-flat-button color="primary" (click)="selectDay(selected,'Nedelja')">Nedelja</button>
+            <div><b>* ako zelite da neko vreme izbrisete iz postojecih vremena polazaka kliknite na kvacicu da otkvacite</b></div>
+            <mat-expansion-panel style="box-shadow: black; outline-width: 5px; margin-top: 8px;" [expanded]="true">
+              <mat-expansion-panel-header>
+                Vremena polazaka iz baze podataka za izabranu liniju
+              </mat-expansion-panel-header>
+              <div *ngIf="selected.Day">
+                <div style="font-size: 1.2em; font-weight: 700;">{{selected.Day | replace : '_' : ' '}}</div>
+                <hr>
+                <mat-checkbox *ngFor="let time of timetable(selected,selected.Day)" (click)="CheckBoxDbToggle(selected.Day,time)" class="time-div" style="display: block;" checked="true">{{time}}</mat-checkbox>
+              </div>
+            </mat-expansion-panel>  
+          </div>
+          <button mat-flat-button color="primary"  (click)="CreateRedvoznje(editRedvoznjeFormGroup.value)">Sacuvaj red voznje</button>
+        </form>
+    </div>
+  </div>
+  <div mat-dialog-actions style="margin-top: 20px;">
+    <button mat-raised-button color="primary" (click)="onNoClick()" cdkFocusInitial>Odustani</button>
+  </div>
+</div>

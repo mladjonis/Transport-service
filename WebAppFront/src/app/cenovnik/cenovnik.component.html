@@ -1,0 +1,71 @@
+<div class="content">
+  <div class="row">
+    <div class="leftcolumn"> <!--leftcolumn-center-->
+      <mat-card class="result">
+        <mat-card-content>
+          <h2 class="example-h2">Filter karata</h2>
+          <section class="example-section">
+            Prikazi sve karte
+            <mat-slide-toggle
+                class="example-margin"
+                [color]="color"
+                [checked]="checked"
+                (change)="toggleRadioButton(checked)">
+            Prikazi karte za trenutnog korisnika
+            </mat-slide-toggle>
+          </section>
+        </mat-card-content>
+        <mat-form-field class='ticketFilter' appearance="outline">
+          <mat-label>Filter karata</mat-label>
+          <input matInput (keyup)="applyFilter($event.target.value)">
+        </mat-form-field>
+      </mat-card>
+      <div class="card">
+        <div class="fakeimg lines">
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <ng-container matColumnDef="TicketType">
+              <th mat-header-cell *matHeaderCellDef> Tip karte </th>
+              <td mat-cell *matCellDef="let element" [ngClass] = "{'td-not-allowed': !element.Buyable}"> {{element.TicketType | titlecase}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Price">
+                <th mat-header-cell *matHeaderCellDef> Cena </th>
+                <td mat-cell *matCellDef="let element" [ngClass] = "{'td-not-allowed': !element.Buyable}"> {{element.PriceFinal.Price}} </td>
+            </ng-container>
+            <ng-container matColumnDef="UserTypeStringID">
+              <th mat-header-cell *matHeaderCellDef> Tip korisnika </th>
+              <td mat-cell *matCellDef="let element" [ngClass] = "{'td-not-allowed': !element.Buyable}"> {{element.User.UserTypeStringID}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': row.Selected, 'disabled': !row.Buyable}"  (click)="selectTicket(row)"></tr>
+          </table>
+        </div>
+        <mat-error *ngIf="!godisnjaValidna">
+          * Nema pravo da kupite godisnju kartu, jer vec imate jednu kupljenu. Sledeca moze biti kupljena kada ova istekne.
+        </mat-error>
+        <mat-error *ngIf="!mesecnaValidna">
+          * Nema pravo da kupite mesecnu kartu, jer vec imate jednu kupljenu. Sledeca moze biti kupljena kada ova istekne.
+        </mat-error>
+        <mat-error *ngIf="godisnjaValidna && expiresSoon">
+          * Godisnja karta Vam istice za 5 dana mozete da kupite novu.
+        </mat-error>
+        <mat-error *ngIf="mesecnaValidna && expiresSoon">
+          * Mesecna karta Vam istice za 5 dana mozete da kupite novu.
+        </mat-error>
+    </div>
+  </div>
+  <div class="rightcolumn-paypal">
+    <div hidden #divPaypal class="card">
+      <h2 class="example-h2">Kupovina izabrane karte</h2>
+      <p *ngIf="cenaEur">Cena konvertovana u EUR</p>
+      <label *ngIf="cenaEur" class="font-1-1">{{cenaEura}} eur</label>
+      <div id="paypal-checkout-btn"></div>
+    </div>
+    <mat-card *ngIf="kupljenaKartaID > 0" class="card">
+      <h3 class="example-h2">Informacije o karti</h3>
+      <label class="font-1-1">ID karte je <b>{{kupljenaKartaID}}</b></label><br>
+      <label class="font-1-1">Vazi do: <br> <b style="text-align: center;">{{kupljenaKartaIstice}}</b></label><br>
+      <label class="font-1-1">Cena RSD <b>{{cenaRSD}}</b></label>
+    </mat-card>
+  </div>
+</div>

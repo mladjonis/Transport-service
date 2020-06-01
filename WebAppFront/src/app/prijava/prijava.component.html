@@ -1,0 +1,31 @@
+<form [formGroup]="loginFormGroup" ><!--(ngSubmit)="Login()"-->
+<mat-card>
+  <h2 class="h2-center">Prijava</h2>
+  <mat-form-field appearance="outline">
+    <mat-label>E-mail</mat-label>
+    <input matInput placeholder="Email" type="email" formControlName="email" required>
+    <mat-error [ngClass]="{ 'show': loginFormGroup.controls.email.hasError('email') }">
+      Unesite validnu e-mail adresu.
+    </mat-error>
+    <mat-error [ngClass]="{ 'show': loginFormGroup.controls.email.hasError('required') }">
+      E-mail je obavezan.
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Sifra</mat-label>
+    <input matInput placeholder="Password" formControlName="password" [type]=" hide ? 'password' : 'text'" required>
+    <mat-error [ngClass]="{ 'show': loginFormGroup.controls.password.hasError('password')}">
+      Sifra je obavezna.
+    </mat-error>
+    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+  </mat-form-field>
+  <mat-checkbox formControlName="remember">Zapamti me</mat-checkbox>
+  <mat-error *ngIf="loginFailure" style="margin-top: 10px;">Uneseni kredencijali ne postoje u sistemu, pokusajte ponovo</mat-error>
+  <button class="link" (click)="ForgotPassword()" type="button"><span class="link-span">Forgot password?</span></button>
+  <mat-error [ngClass]="{ 'show': !loginFormGroup.hasError('emailNotConfirmed')}">E-mail adresa nije potvrdjena preko linka koji je poslan na istu.</mat-error>
+  <button  mat-raised-button color="accent" [ngClass]="{ 'show': !loginFormGroup.hasError('emailNotConfirmed')}" (click)="ResendConfirmEmail()">Posalji ponovo email za potvrdu adrese</button>
+  <button mat-raised-button color="primary" class="login-button" type="submit" (click)="Login()">Prijava</button>
+</mat-card>
+</form>

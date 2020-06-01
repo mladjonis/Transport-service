@@ -1,0 +1,70 @@
+<div class="content">
+  <div class="row">
+    <div class="leftcolumn">
+      <div>
+        <mat-card class="mat-card-width">
+          <mat-form-field class='ticketsFilter'>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter linija">
+          </mat-form-field>
+        </mat-card>
+      </div>
+      <div class="card">
+        <div class="fakeimg lines">
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <ng-container matColumnDef="TransportLineID">
+              <th mat-header-cell *matHeaderCellDef> Smer </th>
+              <td mat-cell *matCellDef="let element"> {{element.TransportLineID}} </td>
+            </ng-container>
+            <ng-container matColumnDef="FromTo">
+                <th mat-header-cell *matHeaderCellDef> Linija </th>
+                <td mat-cell *matCellDef="let element"> {{element.TransportLines.FromTo}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': row.Selected}"  (click)="selectLine(row)"></tr>
+          </table>
+        </div>
+      </div>
+
+      <div *ngFor="let selected of selectedRows" class="day-buttons">
+      <div class="card">
+        <button mat-flat-button (click)="selectDay(selected,'Radni_dan')">Radni dan</button>
+        <button mat-flat-button (click)="selectDay(selected,'Subota')">Subota</button>
+        <button mat-flat-button (click)="selectDay(selected,'Nedelja')">Nedelja</button>
+          <mat-expansion-panel style="box-shadow: black; outline-width: 5px; margin-top: 8px;" [expanded]="true">
+            <mat-expansion-panel-header>
+              {{selected.TransportLines.TransportLineID}} |  {{selected.TransportLines.FromTo}}
+            </mat-expansion-panel-header>
+            <div *ngIf="selected.Day">
+              <div style="font-size: 1.2em; font-weight: 700;">{{selected.Day | replace : '_' : ' '}}</div>
+              <hr>
+              <div *ngFor="let time of timetable(selected,selected.Day)" class="time-div">
+                <b>{{time}}</b>
+              </div>
+            </div>
+          </mat-expansion-panel>  
+        </div>
+      </div>
+    </div>
+    <!--ovo verovatno skloniti nema potrebe ali sta ubaciti tu ??-->
+    <!-- <div class="rightcolumn">
+      <div class="card2">
+        <p>021</p>
+        <div class="fakeimg2">
+          place for ad
+        </div>
+      </div>
+      <div class="card2">
+        <p>021</p>
+        <div class="fakeimg2">
+          place for ad
+        </div>
+      </div>
+      <div class="card2">
+        <p>021</p>
+        <div class="fakeimg2">
+          place for ad
+        </div>
+      </div>
+    </div> -->
+  </div>
+</div>
