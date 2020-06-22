@@ -4,6 +4,8 @@ import { UserProfile, ChangePasswordBindingModel } from '../modeli';
 import { AuthHttpService } from '../services/auth.service';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { UserService } from '../services/user.service';
+import { MatDialog } from '@angular/material';
+import { DeleteUserModalComponent } from '../delete-user-modal/delete-user-modal.component';
 
 
 @Component({
@@ -31,8 +33,11 @@ export class ProfilComponent implements OnInit {
   tickets: Array<any> = new Array<any>();
 
 
-  constructor(private authService: AuthHttpService, private fb: FormBuilder
-              ,private userService: UserService) { }
+  constructor(
+    private authService: AuthHttpService, 
+    private fb: FormBuilder,
+    private userService: UserService,
+    private dialog: MatDialog) { }
 
 
   ngOnInit() {
@@ -178,5 +183,12 @@ export class ProfilComponent implements OnInit {
 
   selectChange(event){
     this.f.usertype.setValue(event.value);
+  }
+
+  DeleteUser() {
+    const dialogRef = this.dialog.open(DeleteUserModalComponent,{
+      height: '400px',
+      width: '400px'
+    });
   }
 }

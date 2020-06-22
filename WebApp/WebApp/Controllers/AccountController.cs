@@ -160,6 +160,7 @@ namespace WebApp.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [ResponseType(typeof(ApplicationUser))]
+        //[Route("DeleteUser/{id}")]
         [Route("DeleteUser")]
         [Authorize(Roles = "Admin")]
         public IHttpActionResult DeleteUser([FromUri]string id)
@@ -167,23 +168,75 @@ namespace WebApp.Controllers
             ApplicationUser user = UserManager.Users.FirstOrDefault(x => x.Id == id);
             if (user == null)
             {
-                return NotFound();
+                return BadRequest();
             }
-            if (user.Tickets.Count() > 0)
+            else
             {
-                foreach(var ticket in user.Tickets)
+                if (user.Tickets.Count() > 0)
                 {
-                    var t = unitOfWork.Ticket.Get(ticket.TicketID);
-                    unitOfWork.Ticket.Remove(t);
-                    var pf = unitOfWork.PriceFinal.Get(ticket.PriceFinal.ID);
-                    unitOfWork.PriceFinal.Remove(pf);
+                    foreach (var ticket in user.Tickets)
+                    {
+                        var t = unitOfWork.Ticket.Get(ticket.TicketID);
+                        unitOfWork.Ticket.Remove(t);
+                        var pf = unitOfWork.PriceFinal.Get(ticket.PriceFinal.ID);
+                        unitOfWork.PriceFinal.Remove(pf);
+                    }
+                    //unitOfWork.Complete();
                 }
+            }
+
+            try
+            {
+                UserManager.Delete(user);
                 unitOfWork.Complete();
             }
+            catch (Exception e)
+            {
 
-            UserManager.Delete(user);
+            }
 
             return Ok(user);
+        }
+
+        [Route("DeleteSelf")]
+        [Authorize]
+        [HttpDelete]
+        public IHttpActionResult DeleteSelf()
+        {
+            var userId = User.Identity.GetUserId();
+
+            var user = UserManager.Users.FirstOrDefault(x => x.Id == userId);
+
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                if (user.Tickets.Count() > 0)
+                {
+                    foreach (var ticket in user.Tickets)
+                    {
+                        var t = unitOfWork.Ticket.Get(ticket.TicketID);
+                        unitOfWork.Ticket.Remove(t);
+                        var pf = unitOfWork.PriceFinal.Get(ticket.PriceFinal.ID);
+                        unitOfWork.PriceFinal.Remove(pf);
+                    }
+                    //unitOfWork.Complete();
+                }
+            }
+
+            try
+            {
+                UserManager.Delete(user);
+                unitOfWork.Complete();
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            return Ok();
         }
 
         [AllowAnonymous]

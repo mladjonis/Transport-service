@@ -82,7 +82,7 @@
       </form>
       <mat-card *ngIf="role == 'AppUser'" class="mat-tickets">
         <h2>Kupljene karte</h2>
-        <div *ngFor="let ticket of tickets">
+        <!-- <div *ngFor="let ticket of tickets">
           <h3>
             {{ticket.TicketType | titlecase}} karta
           </h3>
@@ -101,7 +101,7 @@
           <h4>
             Istice: {{ticket.Expires | date:'full'}}
           </h4>
-        </div>
+        </div> -->
       </mat-card>
     </div>
     <div class="rightcolumn">
@@ -155,6 +155,12 @@
             <button mat-raised-button color="primary" class="login-button" (click)="UploadPicture()">Postavi sliku</button>
           </div>
         </form>
+      </mat-card>
+      <mat-card style="margin-top: 30px;">
+        <h3 style="color: red;" class="h2-center">Operacije sa nalogom</h3>
+        <button mat-raised-button color="primary" (click)="DeleteUser()">Obrisi svoj nalog</button>
+        <hr>
+        <button mat-raised-button color="primary" (click)="ExportData()">Export podataka u zeljeni format</button>
       </mat-card>
     </div>
   </div>

@@ -66,6 +66,10 @@ export class UserService {
       return this.http.delete<any>(this.base_url + "/api/Account/DeleteUser", {params: { id:id }});
     }
 
+    DeleteSelf(): Observable<any> {
+      return this.http.delete<any>(this.base_url + "/api/Account/DeleteSelf");
+    }
+
     PasswordRecovery(model: PasswordRecovery): Observable<any> {
       return this.http.post<any>(this.base_url + "/api/Account/ForgotPassword/", model);
     }

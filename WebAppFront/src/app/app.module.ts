@@ -9,7 +9,8 @@ import { MatButtonModule, MatCheckboxModule,
         MatTabsModule, MatExpansionModule, 
         MatSlideToggleModule, MatStepperModule,
         MatNativeDateModule, MatDatepickerModule,
-        MatTreeModule, MatDialogModule, MatRadioModule } from '@angular/material';
+        MatTreeModule, MatDialogModule, 
+        MatRadioModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 
@@ -48,13 +49,6 @@ import { PricelistMenuComponent } from './pricelist-menu/pricelist-menu.componen
 import { CenovnikEditComponent } from './cenovnik-edit/cenovnik-edit.component';
 import { CenovnikCreateComponent } from './cenovnik-create/cenovnik-create.component';
 import { CenovnikDeleteComponent } from './cenovnik-delete/cenovnik-delete.component';
-
-
-import { ReplaceUnderscorePipe } from './pipes/replace-underscore';
-import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
-import sr from '@angular/common/locales/sr-Latn';
-import { registerLocaleData } from '@angular/common';
 import { MapAdminOperationsComponent } from './map-admin-operations/map-admin-operations.component';
 import { AdminUserOperationsComponent } from './admin-user-operations/admin-user-operations.component';
 import { AdminUsersMenuComponent } from './admin-users-menu/admin-users-menu.component';
@@ -63,6 +57,15 @@ import { ForgetPasswordComponent } from './forget-password/forget-password.compo
 import { PasswordRecoveryComponent } from './password-recovery/password-recovery.component';
 import { EmailModalResendComponent } from './email-modal-resend/email-modal-resend.component';
 import { EmailSendComponent } from './email-send/email-send.component';
+import { DeleteUserModalComponent } from './delete-user-modal/delete-user-modal.component';
+
+
+import { ReplaceUnderscorePipe } from './pipes/replace-underscore';
+import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+import sr from '@angular/common/locales/sr-Latn';
+import { registerLocaleData } from '@angular/common';
+
 
 registerLocaleData(sr);
 
@@ -97,7 +100,8 @@ registerLocaleData(sr);
     ForgetPasswordComponent,
     PasswordRecoveryComponent,
     EmailModalResendComponent,
-    EmailSendComponent
+    EmailSendComponent,
+    DeleteUserModalComponent
     ],
   imports: [
     BrowserModule,
@@ -142,7 +146,8 @@ registerLocaleData(sr);
     AdminUsersMenuComponent,
     AdminUsersDeleteComponent,
     ForgetPasswordComponent,
-    EmailModalResendComponent
+    EmailModalResendComponent,
+    DeleteUserModalComponent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

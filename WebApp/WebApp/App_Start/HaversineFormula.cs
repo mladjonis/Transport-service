@@ -116,8 +116,6 @@ namespace WebApp.App_Start
             secondLongidute = HaversineFormula.ConvertDegreesToRadians(secondLongidute);
 
             IList<(double, double)> newLatLng = new List<(double, double)>();
-            //if (precisionOfStep < stepLengthToMove)
-            //    return (0, 0);
 
             while (HaversineFormula.CalculateDistanceBetweenTwoPoints(
                      firstLatitude, firstLongitude,
@@ -125,40 +123,9 @@ namespace WebApp.App_Start
             {
                 double bearing = HaversineFormula.Bearing(firstLatitude, firstLongitude,
                                                     secondLatitude, secondLongidute);
-                //newLatLng.Clear();
-                newLatLng.Add(HaversineFormula.CalculateNewSetOfPoints(firstLatitude, firstLongitude, bearing, precisionOfStep));
-                //yield return newLatLng[0];
-                //return HaversineFormula.CalculateNewSetOfPoints(firstLatitude, firstLongitude, bearing, precisionOfStep);
+                newLatLng.Add(HaversineFormula.CalculateNewSetOfPoints(firstLatitude, firstLongitude, bearing, precisionOfStep));        
             }
             return newLatLng;
         }
-
-        /*public static IEnumerable<(double, double)> MoveOnRoute(List<LinePoint> path, double stepLength)
-        {
-            double precisionOfStep = stepLength + 0.02;
-            IList<(double, double)> startPoint = new List<(double, double)> { (HaversineFormula.ConvertToRadians(path[0].X), HaversineFormula.ConvertToRadians(path[0].Y)) };
-            //IList<(double, double)> newLatLng = new List<(double, double)>();
-            for (int i = 0; i < path.Count-1;i++)
-            {
-                var endPoint = new List<(double, double)> { (HaversineFormula.ConvertToRadians(path[i + 1].X), HaversineFormula.ConvertToRadians(path[i + 1].Y)) };
-
-                if (HaversineFormula.CalculateDistanceBetweenTwoPoints(
-                    startPoint[0].Item1, startPoint[0].Item2,
-                    endPoint[0].Item1, endPoint[0].Item2) < stepLength)
-                    continue;
-
-                foreach(var startPointt in MoveAtRoute(startPoint[0].Item1, startPoint[0].Item2,
-                    endPoint[0].Item1, endPoint[0].Item2, stepLength, precisionOfStep))
-                {
-                    //newLatLng.Clear();
-                    //newLatLng.Add(startPointt);
-                    //yield return newLatLng[0];
-                    yield return startPointt;
-                }
-            }
-        }
-
-
-    */
     }
 }

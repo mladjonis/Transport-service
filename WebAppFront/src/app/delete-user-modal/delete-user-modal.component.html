@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>Brisanje korisnika iz sistema</h1>
+<div mat-dialog-content style="margin-top: 25px;">
+  <p>Da li ste sigurni? Operacija brisanja nije reverzibilna!</p>
+  <p>Ukoliko ste sigurni kliknite na dugme <u>Potvrdi</u> i bicete automatski izlogovani iz sistema a vasi podaci izbrisani</p>
+</div>
+<div mat-dialog-actions style="margin-top: 20px;">
+    <button mat-raised-button color="primary" (click)="onYesClick()">Potvrdi</button>
+    <button mat-raised-button color="primary" (click)="onNoClick()">Odustani</button>
+</div>
