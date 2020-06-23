@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -25,7 +26,7 @@ using WebApp.Results;
 
 namespace WebApp.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -913,6 +914,30 @@ namespace WebApp.Controllers
             return Ok(user.Files);
         }
 
+        [HttpGet]
+        [Route("Export")]
+        public IHttpActionResult Export([FromUri]string exportType)
+        {
+            var userId = User.Identity.GetUserId();
+            var user = UserManager.Users.FirstOrDefault(x => x.Id == userId);
+
+            try
+            {
+                var folderPath = GetUserDocumentFolderPath(userId);
+                CreateUserFolder(folderPath);
+                var userPath = $"{folderPath}/{userId}";
+                using(var stream = new StreamWriter(userPath, true, Encoding.UTF8))
+                {
+                    //write data
+                }
+            }
+            catch(Exception ex)
+            {
+                //log
+            }
+            return Ok();
+        }
+
 
         protected override void Dispose(bool disposing)
         {
@@ -938,6 +963,11 @@ namespace WebApp.Controllers
         private string GetUserFolderPath(string userId)
         {
             return System.Web.Hosting.HostingEnvironment.MapPath("~/imgs/users/" + userId);
+        }
+
+        private string GetUserDocumentFolderPath(string userId)
+        {
+            return System.Web.Hosting.HostingEnvironment.MapPath("~/docs/users/" + userId);
         }
 
         private bool IsCorrectFileExtension(string fileName)

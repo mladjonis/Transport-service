@@ -31,13 +31,12 @@
 
             CreateRoles(context);
 
-            var userStore = new UserStore<ApplicationUser>(context);
-            var userManager = new UserManager<ApplicationUser>(userStore);
+
 
             AddUserTypes(context);
-            AddSpecialUsers(context, userManager);
+            AddSpecialUsers(context);
             AddBlogPosts(context);
-            AddOrdinaryUsers(context, userManager);
+            AddOrdinaryUsers(context);
             
             var pricelist = AddPricelist(context);
             AddTicketAndPriceFinals(context,pricelist);
@@ -90,8 +89,10 @@
             }
         }
 
-        private void AddSpecialUsers(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        private void AddSpecialUsers(ApplicationDbContext context)
         {
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
 
             if (!context.Users.Any(u => u.UserName == "admin@yahoo.com"))
             {
@@ -116,8 +117,11 @@
             context.SaveChanges();
         }
 
-        private void AddOrdinaryUsers(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        private void AddOrdinaryUsers(ApplicationDbContext context)
         {
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+
             if (!context.Users.Any(u => u.UserName == "anonymus@anonymus.com"))
             {
                 var user = new ApplicationUser() { Id = "anonymus", UserName = "anonymus@anonymus", Email = "anonymus@anonymus.com", PasswordHash = ApplicationUser.HashPassword("password"), DateOfBirth = new DateTime(1996, 9, 6, 10, 02, 01), UserTypeID = 1 };

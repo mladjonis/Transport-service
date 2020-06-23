@@ -160,7 +160,12 @@
         <h3 style="color: red;" class="h2-center">Operacije sa nalogom</h3>
         <button mat-raised-button color="primary" (click)="DeleteUser()">Obrisi svoj nalog</button>
         <hr>
-        <button mat-raised-button color="primary" (click)="ExportData()">Export podataka u zeljeni format</button>
+        <form [formGroup]="exportFormGroup">
+          <mat-checkbox checked="false" formControlName="pdf" style="display: block;">PDF</mat-checkbox>
+          <mat-checkbox checked="false" formControlName="csv" style="display: block;">CSV</mat-checkbox>
+          <mat-error [ngClass]="{ 'show': exportFormGroup.hasError('exportInvalid') }">Morate da odabere bar jedan format exporta.</mat-error>
+          <button mat-raised-button color="primary" (click)="ExportData()">Export podataka u zeljeni format</button>
+        </form>
       </mat-card>
     </div>
   </div>

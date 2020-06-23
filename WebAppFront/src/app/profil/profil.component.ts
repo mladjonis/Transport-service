@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserProfile, ChangePasswordBindingModel } from '../modeli';
 import { AuthHttpService } from '../services/auth.service';
@@ -6,6 +6,7 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { UserService } from '../services/user.service';
 import { MatDialog } from '@angular/material';
 import { DeleteUserModalComponent } from '../delete-user-modal/delete-user-modal.component';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -13,10 +14,12 @@ import { DeleteUserModalComponent } from '../delete-user-modal/delete-user-modal
   templateUrl: './profil.component.html',
   styleUrls: ['./profil.component.css']
 })
-export class ProfilComponent implements OnInit {
+export class ProfilComponent implements OnInit,OnDestroy {
 
+  private subscription: Subscription = new Subscription();
   profilFormGroup: FormGroup;
   changePasswordForumGroup: FormGroup;
+  exportFormGroup: FormGroup;
   userProfile: UserProfile;
   hide: boolean = false;
   hideConfirmed: boolean = false;
@@ -70,7 +73,12 @@ export class ProfilComponent implements OnInit {
       confirmPassword: ['', RxwebValidators.compare({fieldName:'password'})],
     });
 
-    this.userService.GetUserProfileInfo(this.userId).subscribe(user => {
+    this.exportFormGroup = this.fb.group({
+      csv: [''],
+      pdf: ['']
+    })
+
+    this.subscription.add(this.userService.GetUserProfileInfo(this.userId).subscribe(user => {
       //???
       this.tickets = [...user.Tickets];
       // this.tickets.push(user.Tickets[4]);
@@ -101,25 +109,26 @@ export class ProfilComponent implements OnInit {
       }
     }, err=> {
       console.log(err);
-    })
+    }));
+  }
+
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
   }
 
   UpdateProfile() {
-    this.userService.UpdateUserProfile(this.userId, this.GetUserProfileFromForm()).subscribe(data =>{
-
+    this.subscription.add(this.userService.UpdateUserProfile(this.userId, this.GetUserProfileFromForm()).subscribe(data =>{
       this.updateSuccess = true;
     }, err=>{
       console.log(err);
       this.updateSuccess = false;
       this.profilFormGroup.invalid;
-    });
-
-
+    }));
   }
 
   ChangePassword() {
     let pwBindingModel = new ChangePasswordBindingModel(this.passwordGetter('oldPassword'),this.passwordGetter('password'), this.passwordGetter('confirmPassword'));
-    this.userService.ChangePassword(pwBindingModel).subscribe(data=>{
+    this.subscription.add(this.userService.ChangePassword(pwBindingModel).subscribe(data=>{
       this.oldPasswordInCorrect = false;
       this.success = true;
     },err=>{
@@ -127,7 +136,7 @@ export class ProfilComponent implements OnInit {
       this.oldPasswordInCorrect = true;
       this.success = false;
       this.changePasswordForumGroup.controls.oldPassword.reset();
-    });
+    }));
   }
 
   GetUserProfileFromForm(): UserProfile {
@@ -148,9 +157,9 @@ export class ProfilComponent implements OnInit {
 
   UploadPicture() {
     if(this.imgURL){
-      this.userService.UploadPicture(this.file).subscribe(data=>{
+      this.subscription.add(this.userService.UploadPicture(this.file).subscribe(data=>{
         this.docUrl = `${this.base_url}/imgs/users/${this.userId}/${this.file}`;
-      });
+      }));
     }
   }
 
@@ -190,5 +199,34 @@ export class ProfilComponent implements OnInit {
       height: '400px',
       width: '400px'
     });
+  }
+
+  ExportData() {
+    let exportType: string;
+    let csvValue = this.exportFormGroup.controls.csv.value;
+    let pdfValue = this.exportFormGroup.controls.pdf.value;
+
+    if(!csvValue && !pdfValue) {
+      this.exportFormGroup.setErrors({ exportInvalid: true});
+      console.log('radi export valdiacija')
+      this.exportFormGroup.controls.csv.reset();
+      this.exportFormGroup.controls.pdf.reset();
+      return;
+    }
+
+    if(csvValue && pdfValue){
+      exportType = `csv+pdf`;
+    }else if(csvValue){
+      exportType = `csv`;
+    }else {
+      exportType = `pdf`;
+    }
+    console.log(exportType);
+
+    this.subscription.add(this.userService.Export(exportType).subscribe(response=>{
+      console.log(response);
+    },err=>{
+      console.log(err);
+    }));
   }
 }

@@ -40,6 +40,7 @@ namespace WebApp.Models
 
         public string ProviderKey { get; set; }
     }
+
     public class UserInfo
     {
         public string Name { get; set; }
@@ -49,4 +50,6 @@ namespace WebApp.Models
         public string DateOfBirth { get; set; }
         public string UserType { get; set; }
     }
+
+
 }

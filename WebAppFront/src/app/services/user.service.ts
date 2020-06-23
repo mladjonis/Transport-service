@@ -86,6 +86,10 @@ export class UserService {
       return this.http.post<any>(this.base_url + "/api/Account/ConfirmEmail/", model)
     }
 
+    Export(exportType: string): Observable<any> {
+      return this.http.get<any>(this.base_url + "/api/Account/Export", {params: {exportType:exportType}})
+    }
+
     ConvertUserTypeIdToString(type: number): string {
       switch (type) {
         case 0:
