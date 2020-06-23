@@ -15,6 +15,7 @@ namespace WebApp
         {
             app.UseCors(CorsOptions.AllowAll);
             app.UseStaticFiles("/imgs");
+            app.UseStaticFiles("/docs");
             ConfigureAuth(app);
             app.MapSignalR();
         }

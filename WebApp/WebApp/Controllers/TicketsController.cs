@@ -163,9 +163,9 @@ namespace WebApp.Controllers
                 {
                     ticket.PriceRSD = priceFinal.Price * 1;
                 }
-                var str = $"Bought at:{ticket.BoughtAt}\t Price in RSD:{ticket.PriceRSD}\t Ticket type:{ticket.TicketType}\t UserID:{ticket.UserID}\n\n Thank You for using our service.";
-                SendEMailHelper.Send(user.Email, "Ticket details from transport service",
-                    str);
+                //var str = $"Bought at:{ticket.BoughtAt}\t Price in RSD:{ticket.PriceRSD}\t Ticket type:{ticket.TicketType}\t UserID:{ticket.UserID}\n\n Thank You for using our service.";
+                //SendEMailHelper.Send(user.Email, "Ticket details from transport service",
+                //    str);
             }
 
             unitOfWork.Ticket.Add(ticket);

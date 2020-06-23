@@ -8,6 +8,8 @@ using System.Web.Http.Dependencies;
 using Unity;
 using Unity.Injection;
 using Unity.Lifetime;
+using WebApp.Helpers;
+using WebApp.Helpers.Abstractions;
 using WebApp.Models;
 using WebApp.Persistence;
 using WebApp.Persistence.Repository;
@@ -83,8 +85,10 @@ namespace WebApp.App_Start
             container.RegisterType<IUserRepository, UserRepository>();
             container.RegisterType<IPayPalRepository, PayPalRepository>();
             container.RegisterType<IBlogPostRepository, BlogPostRepository>();
-            
-            //zavrseno,sem ako ne bude izmena u rep
+            container.RegisterType<IEmailSender, EmailSender>();
+            //container.RegisterType(typeof(IDataExporter),
+            //    new InjectionConstructor(
+            //        new ResolvedParameter());
         }
 
         public void Dispose()

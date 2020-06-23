@@ -537,6 +537,27 @@ namespace WebApp.Controllers
 
         }
 
+        [NonAction]
+        private string ConvertIntToString(int usertype)
+        {
+            if (usertype == 0)
+            {
+                return "Obican";
+            }
+            else if (usertype == 1)
+            {
+                return "Student";
+            }
+            else if (usertype ==2 )
+            {
+                return "Penzioner";
+            }
+            else
+            {
+                return "Obican";
+            }
+        }
+
         [AllowAnonymous]
         [Route("ResetPassword", Name = "ResetPasswordRoute")]
         [HttpPost]
@@ -919,19 +940,29 @@ namespace WebApp.Controllers
         public IHttpActionResult Export([FromUri]string exportType)
         {
             var userId = User.Identity.GetUserId();
-            var user = UserManager.Users.FirstOrDefault(x => x.Id == userId);
+            var user = unitOfWork.User.Get(userId);
+            //var user = unitOfWork.User.Get("appu");
+            //var userId = user.Id;
+            var usertype = ConvertIntToString(user.UserType.TypeOfUser);
 
             try
             {
                 var folderPath = GetUserDocumentFolderPath(userId);
                 CreateUserFolder(folderPath);
                 var userPath = $"{folderPath}/{userId}";
-                using(var stream = new StreamWriter(userPath, true, Encoding.UTF8))
+                if (exportType.Split('+').Length > 1)
                 {
-                    //write data
+                    Exporter.ExportCsv(userPath, user, usertype);
+                    Exporter.ExportPdf(userPath, user, usertype);
+                }else if (exportType.Equals("csv"))
+                {
+                    Exporter.ExportCsv(userPath, user, usertype);
+                }else if (exportType.Equals("pdf"))
+                {
+                    Exporter.ExportPdf(userPath, user, usertype);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //log
             }

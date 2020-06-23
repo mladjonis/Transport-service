@@ -279,6 +279,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Abstractions\IDataExporter.cs" />
+    <Compile Include="Helpers\Abstractions\IEmailSender.cs" />
+    <Compile Include="Helpers\CsvExporter.cs" />
+    <Compile Include="Helpers\EmailSender.cs" />
+    <Compile Include="Helpers\PdfExporter.cs" />
     <Compile Include="Hubs\VehicleHub.cs" />
     <Compile Include="Migrations\202002261657212_init.cs" />
     <Compile Include="Migrations\202002261657212_init.Designer.cs">
