@@ -947,19 +947,24 @@ namespace WebApp.Controllers
 
             try
             {
+                string imgPath = string.Empty;
+                if (!string.IsNullOrEmpty(user.Files))
+                {
+                    imgPath = $"{GetUserFolderPath(userId)}/{user.Files}";
+                }
                 var folderPath = GetUserDocumentFolderPath(userId);
                 CreateUserFolder(folderPath);
                 var userPath = $"{folderPath}/{userId}";
                 if (exportType.Split('+').Length > 1)
                 {
-                    Exporter.ExportCsv(userPath, user, usertype);
-                    Exporter.ExportPdf(userPath, user, usertype);
+                    Exporter.ExportCsv(userPath, user, usertype, out string dataPath, out string ppPath);
+                    Exporter.ExportPdf(userPath, user, usertype, imgPath, out string dataPdfPath);
                 }else if (exportType.Equals("csv"))
                 {
-                    Exporter.ExportCsv(userPath, user, usertype);
+                    Exporter.ExportCsv(userPath, user, usertype, out string dataPath, out string ppPath);
                 }else if (exportType.Equals("pdf"))
                 {
-                    Exporter.ExportPdf(userPath, user, usertype);
+                    Exporter.ExportPdf(userPath, user, usertype, imgPath);
                 }
             }
             catch (Exception ex)
@@ -967,6 +972,12 @@ namespace WebApp.Controllers
                 //log
             }
             return Ok();
+        }
+
+        [NonAction]
+        private string GetImagePath(string userId)
+        {
+            return GetUserFolderPath(userId);
         }
 
 
