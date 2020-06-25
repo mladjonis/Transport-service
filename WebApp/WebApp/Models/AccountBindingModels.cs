@@ -120,4 +120,18 @@ namespace WebApp.Models
         public string Email { get; set; }
         public string Token { get; set; }
     }
+
+    public class DataLinks
+    {
+        public DataLinks(Uri csvData, Uri csvPayPal, Uri pdfData)
+        {
+            CsvData = csvData;
+            CsvPayPal = csvPayPal;
+            PdfData = pdfData;
+        }
+
+        public Uri CsvData { get; set; }
+        public Uri CsvPayPal { get; set; }
+        public Uri PdfData { get; set; }
+    }
 }

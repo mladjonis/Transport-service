@@ -215,7 +215,7 @@ export class ProfilComponent implements OnInit,OnDestroy {
     }
 
     if(csvValue && pdfValue){
-      exportType = `csv+pdf`;
+      exportType = `csv.pdf`;
     }else if(csvValue){
       exportType = `csv`;
     }else {

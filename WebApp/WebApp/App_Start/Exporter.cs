@@ -29,13 +29,13 @@ namespace WebApp.App_Start
         /// <param name="userPath"></param>
         /// <param name="user"></param>
         /// <param name="usertype"></param>
-        public static void ExportPdf(string userPath, ApplicationUser user, string usertype, string imagePath,out string dataPdfPath)
+        public static void ExportPdf(string userPath, ApplicationUser user, string usertype, string localHost, string imagePath, out Uri dataPdfPath)
         {
             //shorthanded
             //var document = new Document(new PdfDocument(new PdfWriter($"{userPath}.pdf")));
 
-            dataPdfPath = $"{userPath}.pdf";
-            var pdfWriter = new PdfWriter($"{userPath}.pdf");
+            dataPdfPath = new Uri(localHost+$"{user.Name}{user.Surname}.pdf");
+            var pdfWriter = new PdfWriter($"{userPath}\\{user.Name}{user.Surname}.pdf");
             var pdfDocument = new PdfDocument(pdfWriter);
             var document = new Document(pdfDocument);
 
@@ -85,6 +85,7 @@ namespace WebApp.App_Start
 
             Cell cell14 = new Cell(1, 1)
                 .SetTextAlignment(TextAlignment.CENTER)
+                .SetMaxWidth(30)
                 .Add(new Paragraph(user.UserName));
 
 
@@ -101,15 +102,15 @@ namespace WebApp.App_Start
             document.Add(newline);
             document.Add(table);
             document.Add(hrLine);
-            if (user.Tickets.Any(x => x.PayPalPaymentDetails != null))
+            if (user.Tickets.All(x => x.PayPalPaymentDetailsID != null))
             {
                 document.Add(new Paragraph("Karte korisnika"))
                     .SetTextAlignment(TextAlignment.CENTER)
                     .SetBold()
-                    .SetFontSize(20);
+                    .SetFontSize(15);
 
                 //paypal
-                Table payPalTable = new Table(7, true);
+                Table payPalTable = new Table(7, true).UseAllAvailableWidth();
                 for (int i = 0; i < payPalHeaderNames.Length; i++)
                 {
                     Cell cell = new Cell(1, 1)
@@ -168,15 +169,15 @@ namespace WebApp.App_Start
         /// <param name="userPath"></param>
         /// <param name="user"></param>
         /// <param name="usertype"></param>
-        public static void ExportCsv(string userPath, ApplicationUser user, string usertype, out string data, out string pp)
+        public static void ExportCsv(string userPath, ApplicationUser user, string usertype, string localHost, out Uri data, out Uri pp)
         {
-            using (var stream = new StreamWriter($"{userPath}.csv", true, Encoding.UTF8))
+            using (var stream = new StreamWriter($"{userPath}\\{user.Name}{user.Surname}.csv", false, Encoding.UTF8))
             {
                 stream.WriteLine($"Ime,Prezime,Email,Korisnicko ime,Datum rodjenja,Tip korisnika\n{user.Name},{user.Surname},{user.Email},{user.UserName},{user.DateOfBirth},{usertype}\n");
             }
-            data = $"{userPath}.csv";
+            data = new Uri(localHost+$"{user.Name}{user.Surname}.csv");
 
-            using (var stream = new StreamWriter($"{userPath}PayPal.csv", true, Encoding.UTF8))
+            using (var stream = new StreamWriter($"{userPath}\\{user.Name}{user.Surname}PayPal.csv", false, Encoding.UTF8))
             {
                 var ticketString = $"Datum kupovine,Tip karte,Cena RSD,Cena EUR,Adresa grada,ZIP drzave, ZIP grada\n";
                 foreach (var ticket in user.Tickets)
@@ -185,7 +186,7 @@ namespace WebApp.App_Start
                 }
                 stream.WriteLine(ticketString);
             }
-            pp = $"{userPath}PayPal.csv";
+            pp = new Uri(localHost+$"{user.Name}{user.Surname}PayPal.csv");
         }
     }
 }

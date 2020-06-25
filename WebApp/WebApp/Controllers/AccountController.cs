@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -11,6 +13,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Aspose.Zip;
+using Aspose.Zip.Saving;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -33,6 +37,7 @@ namespace WebApp.Controllers
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
         private IUnitOfWork unitOfWork;
+        private string localHost = "http://localhost:52295/docs/users/";
 
         public AccountController()
         {
@@ -939,46 +944,100 @@ namespace WebApp.Controllers
         [Route("Export")]
         public IHttpActionResult Export([FromUri]string exportType)
         {
-            var userId = User.Identity.GetUserId();
-            var user = unitOfWork.User.Get(userId);
-            //var user = unitOfWork.User.Get("appu");
-            //var userId = user.Id;
+            //var userId = User.Identity.GetUserId();
+            //var user = unitOfWork.User.Get(userId);
+            var user = unitOfWork.User.Get("appu");
+            var userId = user.Id;
             var usertype = ConvertIntToString(user.UserType.TypeOfUser);
-
+            DataLinks links;
             try
             {
                 string imgPath = string.Empty;
+
                 if (!string.IsNullOrEmpty(user.Files))
                 {
                     imgPath = $"{GetUserFolderPath(userId)}/{user.Files}";
                 }
                 var folderPath = GetUserDocumentFolderPath(userId);
                 CreateUserFolder(folderPath);
-                var userPath = $"{folderPath}/{userId}";
-                if (exportType.Split('+').Length > 1)
+                //var userPath = $"{folderPath}\\{user.Id}";
+                var userPath = $"{folderPath}";
+                localHost += $"{userId}/";
+                if (exportType.Split('.').Length > 1)
                 {
-                    Exporter.ExportCsv(userPath, user, usertype, out string dataPath, out string ppPath);
-                    Exporter.ExportPdf(userPath, user, usertype, imgPath, out string dataPdfPath);
-                }else if (exportType.Equals("csv"))
-                {
-                    Exporter.ExportCsv(userPath, user, usertype, out string dataPath, out string ppPath);
-                }else if (exportType.Equals("pdf"))
-                {
-                    Exporter.ExportPdf(userPath, user, usertype, imgPath);
+                    Exporter.ExportCsv(userPath, user, usertype, localHost, out Uri dataPath, out Uri ppPath);
+                    Exporter.ExportPdf(userPath, user, usertype, localHost, imgPath, out Uri dataPdfPath);
+                    links = new DataLinks(dataPath, ppPath, dataPdfPath);
+                    string[] stringSeparators = new string[] { $"\\{user.Id}" };
+                    //ne moze se zipovati onaj direktorijum koji koristimo promeniti puvanju na bude u istoj ravnini sa appu a ne u appu
+                    using (FileStream zipFile = File.Open(userPath.Split(stringSeparators, StringSplitOptions.None)[0]+$"\\{user.Name}.zip", FileMode.Create))
+                        using (Archive archive = new Archive())
+                        {
+                            DirectoryInfo corpus = new DirectoryInfo(folderPath);
+                            archive.CreateEntries(corpus);
+                            archive.Save(zipFile);
+                            return GetDocuments(userPath, user.Name, "zip");
+                        }
+                    //return GetDocuments(userPath, user.Name, "csv");
+                    //return GetDocuments(userPath, user.Name, "pdf");
+
                 }
+                else if (exportType.Equals("csv"))
+                {
+                    Exporter.ExportCsv(userPath, user, usertype, localHost, out Uri dataPath, out Uri ppPath);
+                    links = new DataLinks(dataPath, ppPath, null);
+
+                    using (FileStream zipFile = File.Open(userPath + $"\\{user.Name}CSV.zip", FileMode.Create))
+                    {
+                        // Files to be added to archive
+                        FileInfo fi1 = new FileInfo($"{userPath}\\{user.Name}{user.Surname}.csv");
+                        FileInfo fi2 = new FileInfo($"{userPath}\\{user.Name}{user.Surname}PayPal.csv");
+
+                        using (var archive = new Archive())
+                        {
+                            archive.CreateEntry($"{userPath}\\{user.Name}{user.Surname}.csv", fi1);
+                            archive.CreateEntry($"{userPath}\\{user.Name}{user.Surname}PayPal.csv", fi2);
+                            archive.Save(zipFile, new ArchiveSaveOptions() { Encoding = Encoding.UTF8 });
+                        }
+                    }
+                    return GetDocuments(userPath, $"{user.Name}CSV", "zip");
+
+
+                }
+                else if (exportType.Equals("pdf"))
+                {
+                    Exporter.ExportPdf(userPath, user, usertype, localHost, imgPath, out Uri dataPdfPath);
+                    links = new DataLinks(null, null, dataPdfPath);
+                    return GetDocuments(userPath, user.Name, "pdf");
+                }
+                else
+                {
+                    links = new DataLinks(null, null, null);
+                }
+
+
+                return Ok(links);
             }
             catch (Exception ex)
             {
                 //log
             }
-            return Ok();
+            return Ok(HttpStatusCode.NoContent);
         }
 
-        [NonAction]
-        private string GetImagePath(string userId)
+        private IHttpActionResult GetDocuments(string userPath,string name, string docType)
         {
-            return GetUserFolderPath(userId);
+            var file = File.ReadAllBytes(userPath+ $"/{name}.{docType}");
+            IHttpActionResult response;
+            HttpResponseMessage responseMsg = new HttpResponseMessage(HttpStatusCode.OK);
+            responseMsg.Content = new ByteArrayContent(file);
+            responseMsg.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
+            responseMsg.Content.Headers.ContentDisposition.FileName = $"{name}.{docType}";
+            responseMsg.Content.Headers.ContentType = new MediaTypeHeaderValue($"application/{docType}");
+            response = ResponseMessage(responseMsg);
+            return response;
         }
+
 
 
         protected override void Dispose(bool disposing)

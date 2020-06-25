@@ -177,6 +177,18 @@ export class ResetPasswordBindingModel {
     }
 }
 
+export class DataLinks {
+    CsvData: string;
+    CsvPayPal: string;
+    PdfData: string;
+
+    constructor(csvData: string, csvPayPal: string, pdfData: string){
+        this.CsvData = csvData;
+        this.CsvPayPal = csvPayPal;
+        this.PdfData = pdfData;
+    }
+}
+
 export class PayPalPaymentDetails {
     Id : string
     Intent : string
