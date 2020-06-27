@@ -158,6 +158,10 @@
       </mat-card>
       <mat-card style="margin-top: 30px;">
         <h3 style="color: red;" class="h2-center">Operacije sa nalogom</h3>
+        <form [formGroup]="tosFormGroup" *ngIf= "role == 'AppUser'">
+          <mat-checkbox formControlName="tos" style="display: block;">Prihvatam obradu podataka u svrhu kupovine karata</mat-checkbox>
+          <button mat-raised-button color="primary" (click)="ChangeTOS()">Sacuvaj promene</button>
+        </form>
         <button mat-raised-button color="primary" (click)="DeleteUser()">Obrisi svoj nalog</button>
         <hr>
         <form [formGroup]="exportFormGroup">

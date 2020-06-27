@@ -697,7 +697,9 @@ namespace WebApp.Controllers
                 Surname = httpRequest.Form.Get("surname"),
                 Status = status,
                 UserTypeID = userType.UserTypeID,
-                Files = ""};
+                Files = "",
+                AcceptedTOS = bool.Parse(httpRequest.Form.Get("tos"))
+            };
 
             IdentityResult result = UserManager.Create(user);
 
@@ -938,6 +940,24 @@ namespace WebApp.Controllers
             UserManager.Update(user);
 
             return Ok(user.Files);
+        }
+
+        [HttpPut]
+        [Route("ChangeTOS")]
+        public IHttpActionResult ChangeTOS([FromUri]bool tos)
+        {
+            try
+            {
+                var userId = User.Identity.GetUserId();
+                var user = unitOfWork.User.Get(userId);
+                user.AcceptedTOS = tos;
+                unitOfWork.User.Update(user);
+                unitOfWork.Complete();
+            }catch (Exception e)
+            {
+                //log
+            }
+            return Ok();
         }
 
         [HttpGet]

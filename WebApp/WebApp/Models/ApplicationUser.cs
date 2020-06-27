@@ -35,6 +35,8 @@ namespace WebApp.Models
 
         public bool HasVerified { get; set; }
 
+        public bool AcceptedTOS { get; set; }
+
         public string Files { get; set; }
 
         public virtual UserType UserType { get; set; }

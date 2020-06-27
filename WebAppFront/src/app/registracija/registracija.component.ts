@@ -48,7 +48,8 @@ export class RegistracijaComponent implements OnInit, OnDestroy {
                       confirmPassword: ['', RxwebValidators.compare({fieldName:'password'})]}),
         this.fb.group({date: ['', Validators.required]}),
         this.fb.group({usertype: ['', Validators.required]}),
-        this.fb.group({doc: ['']})
+        this.fb.group({doc: ['']}),
+        this.fb.group({tos: ['']})
       ])
     });
   }
@@ -76,8 +77,10 @@ export class RegistracijaComponent implements OnInit, OnDestroy {
       this.controlGetter(4,'confirmPassword'),
       new Date(this.controlGetter(5,'date')).toISOString(),
       this.controlGetter(2,'address'),
-      this.controlGetter(6,'usertype')
+      this.controlGetter(6,'usertype'),
+      this.controlGetter(8,'tos')
     );
+    console.log(user);
 
     this.subscription.add(this.authService.Register(user,this.file).subscribe(data=>{
       this.userExists = false;

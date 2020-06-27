@@ -24,6 +24,7 @@ export class CenovnikComponent implements OnInit, OnDestroy {
   //
   private subscription: Subscription = new Subscription();
   dataSource: MatTableDataSource<any>;
+  acceptedTOS: boolean;
   displayedColumns: string[] = ['TicketType', 'Price', 'UserTypeStringID'];
   selectedRows: Array<any> = new Array<any>();
   color: ThemePalette = 'accent';
@@ -170,7 +171,8 @@ export class CenovnikComponent implements OnInit, OnDestroy {
         }
         else {
         this.subscription.add(this.userService.GetUserProfileInfo(name).subscribe(user=>{
-          if(role == "AppUser"){
+          if(role == "AppUser" && user.AcceptedTOS == true){
+            this.acceptedTOS = true;
             user.UserTypeStringID = this.userService.ConvertTypeOfUserToString(user.UserType.TypeOfUser);
             if(user.Status != "verified"){
               data[0].Buyable = true;
@@ -235,6 +237,9 @@ export class CenovnikComponent implements OnInit, OnDestroy {
                 data[j]=asa;
               }
             }
+          } else if(role == "AppUser" && user.AcceptedTOS == false) {
+            // staviti obavestenje zasto korisnik ne moze da kupi kartu
+            this.acceptedTOS = false;
           }
         },err=>{
           console.log(err);

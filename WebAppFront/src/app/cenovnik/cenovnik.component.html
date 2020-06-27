@@ -52,6 +52,9 @@
         <mat-error *ngIf="mesecnaValidna && expiresSoon">
           * Mesecna karta Vam istice za 5 dana mozete da kupite novu.
         </mat-error>
+        <mat-error *ngIf="!acceptedTOS">
+          * Niste prihvatili uslove koriscenja, pa nemate opciju kupovine karata. Prihvatite uslove koriscenja na Vasem profilu i bice Vam omogucena ova opcija.
+        </mat-error>
     </div>
   </div>
   <div class="rightcolumn-paypal">

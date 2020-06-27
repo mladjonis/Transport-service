@@ -52,8 +52,9 @@ export class RegUser{
     date: string
     usertype : string
     address : string
+    tos: boolean
 
-    constructor(name: string, surname: string, email: string, password: string, confirm: string, date: string, address: string, usertype: string){
+    constructor(name: string, surname: string, email: string, password: string, confirm: string, date: string, address: string, usertype: string, tos: boolean){
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -62,6 +63,7 @@ export class RegUser{
         this.date = date;
         this.address = address;
         this.usertype = usertype;
+        this.tos = tos;
     }
 
 }

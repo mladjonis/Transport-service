@@ -18,6 +18,10 @@ export class UserService {
       return this.http.get<any>(`${this.base_url}/api/Account/GetUser`, {params:{ id: id }});
     }
 
+    ChangeTOS(tos: boolean): Observable<any> {
+      return this.http.put<any>(`${this.base_url}/api/Account/ChangeTOS`, {params:{ tos: tos }});
+    }
+
     UploadPicture(file: File) : Observable<any> {
       let formData = new FormData();
 

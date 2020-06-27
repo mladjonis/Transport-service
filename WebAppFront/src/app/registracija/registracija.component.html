@@ -184,8 +184,9 @@
         </button>
       </div>
     </mat-step>
-    <mat-step state="finish">
+    <mat-step formGroupName="8" state="finish">
       <ng-template matStepLabel>Zavrsni korak registracije</ng-template>
+      <mat-checkbox formControlName="tos">Prihvatam obradu podataka u svrhu kupovine karata</mat-checkbox>
       <div>
         <button mat-mini-fab color="primary" matStepperPrevious class="button-slider-margin">
           <mat-icon>keyboard_arrow_up</mat-icon>

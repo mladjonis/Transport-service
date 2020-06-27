@@ -20,6 +20,7 @@ export class ProfilComponent implements OnInit,OnDestroy {
   profilFormGroup: FormGroup;
   changePasswordForumGroup: FormGroup;
   exportFormGroup: FormGroup;
+  tosFormGroup: FormGroup;
   userProfile: UserProfile;
   hide: boolean = false;
   hideConfirmed: boolean = false;
@@ -56,6 +57,9 @@ export class ProfilComponent implements OnInit,OnDestroy {
         email: ['', Validators.compose([Validators.required, Validators.email])],
         date: ['', Validators.required],
         usertype: ['', Validators.required]
+      });
+      this.tosFormGroup = this.fb.group({
+        tos: ['']
       });
     }else {
       this.profilFormGroup = this.fb.group({
@@ -104,6 +108,7 @@ export class ProfilComponent implements OnInit,OnDestroy {
       this.f.email.setValue(this.userProfile.Email);
       this.f.date.setValue(new Date(this.userProfile.DateOfBirth).toISOString().split('T')[0]);
       if(this.role == 'AppUser'){
+        this.tosFormGroup.controls.tos.setValue(user.AcceptedTOS);
         this.f.usertype.setValue(this.userProfile.UserType);
         this.docUrl = `${this.base_url}/imgs/users/${this.userId}/${user.Files}`;
       }
@@ -199,6 +204,16 @@ export class ProfilComponent implements OnInit,OnDestroy {
       height: '400px',
       width: '400px'
     });
+  }
+
+  ChangeTOS() {
+    let tos = this.tosFormGroup.controls.tos.value;
+
+    this.subscription.add(this.userService.ChangeTOS(tos).subscribe(response=>{
+
+    },err=>{
+      console.log(err);
+    }));
   }
 
   ExportData() {
