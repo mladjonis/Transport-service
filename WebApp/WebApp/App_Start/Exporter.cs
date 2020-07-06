@@ -34,8 +34,8 @@ namespace WebApp.App_Start
             //shorthanded
             //var document = new Document(new PdfDocument(new PdfWriter($"{userPath}.pdf")));
 
-            dataPdfPath = new Uri(localHost+$"{user.Name}{user.Surname}.pdf");
-            var pdfWriter = new PdfWriter($"{userPath}\\{user.Name}{user.Surname}.pdf");
+            dataPdfPath = new Uri(localHost+$"{user.NameEncrypted}{user.SurnameEncrypted}.pdf");
+            var pdfWriter = new PdfWriter($"{userPath}\\{user.NameEncrypted}{user.SurnameEncrypted}.pdf");
             var pdfDocument = new PdfDocument(pdfWriter);
             var document = new Document(pdfDocument);
 
@@ -125,11 +125,11 @@ namespace WebApp.App_Start
                 {
                     Cell cell1 = new Cell(1, 1)
                         .SetTextAlignment(TextAlignment.CENTER)
-                        .Add(new Paragraph(ticket.PayPalPaymentDetails.CreateTime));
+                        .Add(new Paragraph(ticket.PayPalPaymentDetails.CreateTimeEncrypted));
 
                     Cell cell2 = new Cell(1, 1)
                         .SetTextAlignment(TextAlignment.CENTER)
-                        .Add(new Paragraph(ticket.TicketType));
+                        .Add(new Paragraph(ticket.TicketTypeEncrypted));
 
 
                     Cell cell3 = new Cell(1, 1)
@@ -139,21 +139,21 @@ namespace WebApp.App_Start
 
                     Cell cell4 = new Cell(1, 1)
                         .SetTextAlignment(TextAlignment.CENTER)
-                        .Add(new Paragraph(ticket.PayPalPaymentDetails.TransactionsItemListItemsPrice.ToString()));
+                        .Add(new Paragraph(ticket.PayPalPaymentDetails.TransactionsItemListItemsPriceEncrypted.ToString()));
 
 
                     Cell cell5 = new Cell(1, 1)
                         .SetTextAlignment(TextAlignment.CENTER)
-                        .Add(new Paragraph(ticket.PayPalPaymentDetails.ShippingAddressCity));
+                        .Add(new Paragraph(ticket.PayPalPaymentDetails.ShippingAddressCityEncrypted));
 
 
                     Cell cell6 = new Cell(1, 1)
                         .SetTextAlignment(TextAlignment.CENTER)
-                        .Add(new Paragraph(ticket.PayPalPaymentDetails.ShippingAddressCountryCode));
+                        .Add(new Paragraph(ticket.PayPalPaymentDetails.ShippingAddressCountryCodeEncrypted));
 
                     Cell cell7 = new Cell(1, 1)
                         .SetTextAlignment(TextAlignment.CENTER)
-                        .Add(new Paragraph(ticket.PayPalPaymentDetails.ShippingAddressPostalCode.ToString()));
+                        .Add(new Paragraph(ticket.PayPalPaymentDetails.ShippingAddressPostalCodeEncrypted.ToString()));
 
                     payPalTable.AddCell(cell1).AddCell(cell2).AddCell(cell3).AddCell(cell4).AddCell(cell5).AddCell(cell6).AddCell(cell7);
                     document.Add(newline);
@@ -171,22 +171,22 @@ namespace WebApp.App_Start
         /// <param name="usertype"></param>
         public static void ExportCsv(string userPath, ApplicationUser user, string usertype, string localHost, out Uri data, out Uri pp)
         {
-            using (var stream = new StreamWriter($"{userPath}\\{user.Name}{user.Surname}.csv", false, Encoding.UTF8))
+            using (var stream = new StreamWriter($"{userPath}\\{user.NameEncrypted}{user.SurnameEncrypted}.csv", false, Encoding.UTF8))
             {
-                stream.WriteLine($"Ime,Prezime,Email,Korisnicko ime,Datum rodjenja,Tip korisnika\n{user.Name},{user.Surname},{user.Email},{user.UserName},{user.DateOfBirth},{usertype}\n");
+                stream.WriteLine($"Ime,Prezime,Email,Korisnicko ime,Datum rodjenja,Tip korisnika\n{user.NameEncrypted},{user.SurnameEncrypted},{user.EmailEncrypted},{user.UserName},{user.DateOfBirth},{usertype}\n");
             }
-            data = new Uri(localHost+$"{user.Name}{user.Surname}.csv");
+            data = new Uri(localHost+$"{user.NameEncrypted}{user.SurnameEncrypted}.csv");
 
-            using (var stream = new StreamWriter($"{userPath}\\{user.Name}{user.Surname}PayPal.csv", false, Encoding.UTF8))
+            using (var stream = new StreamWriter($"{userPath}\\{user.NameEncrypted}{user.SurnameEncrypted}PayPal.csv", false, Encoding.UTF8))
             {
                 var ticketString = $"Datum kupovine,Tip karte,Cena RSD,Cena EUR,Adresa grada,ZIP drzave, ZIP grada\n";
                 foreach (var ticket in user.Tickets)
                 {
-                    ticketString += $"{ticket.PayPalPaymentDetails.CreateTime},{ticket.TicketType},{ticket.PriceRSD},{ticket.PayPalPaymentDetails.TransactionsItemListItemsPrice},{ticket.PayPalPaymentDetails.ShippingAddressCity},{ticket.PayPalPaymentDetails.ShippingAddressCountryCode},{ticket.PayPalPaymentDetails.ShippingAddressPostalCode}\n";
+                    ticketString += $"{ticket.PayPalPaymentDetails.CreateTimeEncrypted},{ticket.TicketTypeEncrypted},{ticket.PriceRSD},{ticket.PayPalPaymentDetails.TransactionsItemListItemsPriceEncrypted},{ticket.PayPalPaymentDetails.ShippingAddressCityEncrypted},{ticket.PayPalPaymentDetails.ShippingAddressCountryCodeEncrypted},{ticket.PayPalPaymentDetails.ShippingAddressPostalCodeEncrypted}\n";
                 }
                 stream.WriteLine(ticketString);
             }
-            pp = new Uri(localHost+$"{user.Name}{user.Surname}PayPal.csv");
+            pp = new Uri(localHost+$"{user.NameEncrypted}{user.SurnameEncrypted}PayPal.csv");
         }
     }
 }

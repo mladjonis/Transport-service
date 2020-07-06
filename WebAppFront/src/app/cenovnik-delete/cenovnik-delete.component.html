@@ -22,7 +22,7 @@
             Cene za izabrani cenovnik
           </mat-expansion-panel-header>
          <div *ngFor="let pf of selected.PriceFinals">
-           <b>{{pf.Price}} RSD</b> || <b>{{pf.Ticket.TicketType | titlecase}}</b>
+           <b>{{pf.Price}} RSD</b> || <b>{{pf.Ticket.TicketTypeEncrypted | titlecase}}</b>
            <br>
          </div>
         </mat-expansion-panel>  

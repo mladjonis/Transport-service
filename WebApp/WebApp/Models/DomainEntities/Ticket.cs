@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using WebApp.App_Start;
 
 namespace WebApp.Models.DomainEntities
 {
@@ -12,7 +13,20 @@ namespace WebApp.Models.DomainEntities
         public int TicketID { get; set; }
 
         [Required]
-        public string TicketType { get; set; }
+        public string TicketType { get; private set; }
+
+        [NotMapped]
+        public string TicketTypeEncrypted
+        {
+            get
+            {
+                return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TicketType));
+            }
+            set
+            {
+                this.TicketType = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
+            }
+        }
 
         public DateTime? BoughtAt { get; set; }
 

@@ -72,7 +72,7 @@
         </mat-form-field>
         <div class="doc-div" *ngIf="role == 'AppUser'">
           <h2 class="h2-center">Dokument</h2>
-          <img [src]="docUrl" *ngIf="docUrl">
+          <img [src]="docUrl" *ngIf="docUrl" alt="korisnik jos nije postavio sliku">
         </div>
         <h3 class="h3-center" *ngIf="updateSuccess">
           Izmene uspesno izvrsene
@@ -82,9 +82,9 @@
       </form>
       <mat-card *ngIf="role == 'AppUser'" class="mat-tickets">
         <h2>Kupljene karte</h2>
-        <!-- <div *ngFor="let ticket of tickets">
+        <div *ngFor="let ticket of tickets">
           <h3>
-            {{ticket.TicketType | titlecase}} karta
+            {{ticket.TicketTypeEncrypted | titlecase}} karta
           </h3>
           <hr>
           <h5>Cena (RSD/EUR)</h5>
@@ -93,7 +93,7 @@
           </span>
           <br>
           <span>
-            <b>{{ticket.PayPalPaymentDetails.TransactionsAmountTotal}}</b> {{ticket.PayPalPaymentDetails.TransactionsAmountCurrency}}
+            <b>{{ticket.PayPalPaymentDetails.TransactionsAmountTotalEncrypted}}</b> {{ticket.PayPalPaymentDetails.TransactionsAmountCurrencyEncrypted}}
           </span>
           <h4>
             Kupljena: {{ticket.BoughtAt | date:'full'}}  
@@ -101,7 +101,7 @@
           <h4>
             Istice: {{ticket.Expires | date:'full'}}
           </h4>
-        </div> -->
+        </div>
       </mat-card>
     </div>
     <div class="rightcolumn">

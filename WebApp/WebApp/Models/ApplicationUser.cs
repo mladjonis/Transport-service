@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
+using WebApp.App_Start;
 using WebApp.Models.DomainEntities;
 
 namespace WebApp.Models
@@ -16,14 +17,80 @@ namespace WebApp.Models
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
+
         #region Properties
         public int? UserTypeID { get; set; }
         
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
-        public string Surname { get; set; }
+        [NotMapped]
+        public string NameEncrypted
+        {
+            get
+            {
+                return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.Name));
+            }
+            set
+            {
+                this.Name = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
+            }
+        }
 
-        public string Adress { get; set; }
+        [NotMapped]
+        public string EmailEncrypted
+        {
+            get
+            {
+                return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.Email));
+            }
+            set
+            {
+                this.Email = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
+            }
+        }
+
+        public string Surname { get; private set; }
+
+        [NotMapped]
+        public string SurnameEncrypted
+        {
+            get
+            {
+                return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.Surname));
+            }
+            set
+            {
+                this.Surname = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
+            }
+        }
+
+        public string Adress { get; private set; }
+
+        [NotMapped]
+        public string AdressEncrypted
+        {
+            get
+            {
+                return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.Adress));
+            }
+            set
+            {
+                this.Adress = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
+            }
+        }
+
+        //[NotMapped]
+        //public string UserNameEncrypted
+        //{
+        //    get
+        //    {
+        //        return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.UserName));
+        //    }
+        //    set
+        //    {
+        //        this.UserName = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
+        //    }
+        //}
 
         public string Password { get; set; }
 
@@ -31,13 +98,39 @@ namespace WebApp.Models
 
         public DateTime? DateOfBirth { get; set; }
 
-        public string Status { get; set; }
+        public string Status { get; private set; }
+
+        [NotMapped]
+        public string StatusEncrypted
+        {
+            get
+            {
+                return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.Status));
+            }
+            set
+            {
+                this.Status = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
+            }
+        }
 
         public bool HasVerified { get; set; }
 
         public bool AcceptedTOS { get; set; }
 
         public string Files { get; set; }
+
+        //[NotMapped]
+        //public string FilesEncrypted
+        //{
+        //    get
+        //    {
+        //        return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.Files));
+        //    }
+        //    set
+        //    {
+        //        this.Files = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
+        //    }
+        //}
 
         public virtual UserType UserType { get; set; }
 

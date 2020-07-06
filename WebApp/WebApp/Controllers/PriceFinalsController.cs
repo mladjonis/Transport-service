@@ -107,10 +107,10 @@ namespace WebApp.Controllers
                 var pricelist = unitOfWork.Pricelist.Get(pricelistId);
                 var ticketList = new List<Ticket>()
                 {
-                    new Ticket() { TicketType = "regularna", UserID = "anonymus" },
-                    new Ticket() { TicketType = "dnevna", UserID = "anonymus" },
-                    new Ticket() { TicketType = "mesecna", UserID = "anonymus" },
-                    new Ticket() { TicketType = "godisnja", UserID = "anonymus" }
+                    new Ticket() { TicketTypeEncrypted = "regularna", UserID = "anonymus" },
+                    new Ticket() { TicketTypeEncrypted = "dnevna", UserID = "anonymus" },
+                    new Ticket() { TicketTypeEncrypted = "mesecna", UserID = "anonymus" },
+                    new Ticket() { TicketTypeEncrypted = "godisnja", UserID = "anonymus" }
                 };
             
 

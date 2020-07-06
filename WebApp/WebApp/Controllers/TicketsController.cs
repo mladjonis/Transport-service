@@ -138,7 +138,7 @@ namespace WebApp.Controllers
                 {
                     BoughtAt = dateTimeNow,
                     PayPalPaymentDetails = paymentDetails,
-                    TicketType = karta,
+                    TicketTypeEncrypted = karta,
                     UserID = "appu",
                     User = user,
                     PriceRSD = priceFinal.Price * 1,
@@ -152,7 +152,7 @@ namespace WebApp.Controllers
                     BoughtAt = dateTimeNow,
                     PayPalPaymentDetails = paymentDetails,
                     PriceRSD = priceFinal.Price * userType.Coefficient,
-                    TicketType = karta,
+                    TicketTypeEncrypted = karta,
                     UserID = userId,
                     User = user,
                     Expires = expires,

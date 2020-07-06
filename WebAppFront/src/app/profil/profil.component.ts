@@ -92,13 +92,13 @@ export class ProfilComponent implements OnInit,OnDestroy {
 
       if(this.role == 'AppUser'){
         this.userProfile = new UserProfile(
-          user.Name, user.Surname, 
-          user.Email, user.Adress,
+          user.NameEncrypted, user.SurnameEncrypted, 
+          user.EmailEncrypted, user.AdressEncrypted,
           user.DateOfBirth, this.userService.ConvertTypeOfUserToString(user.UserType.TypeOfUser));
       } else {
         this.userProfile = new UserProfile(
-          user.Name, user.Surname, 
-          user.Email, user.Adress,
+          user.NameEncrypted, user.SurnameEncrypted, 
+          user.EmailEncrypted, user.AdressEncrypted,
           user.DateOfBirth, ' ');
       }
          

@@ -37,26 +37,26 @@
             AddSpecialUsers(context);
             AddBlogPosts(context);
             AddOrdinaryUsers(context);
-            
+
             var pricelist = AddPricelist(context);
-            AddTicketAndPriceFinals(context,pricelist);
-            AddTransportLines(context);
-            AddDepartures(context);
+            AddTicketAndPriceFinals(context, pricelist);
+            //AddTransportLines(context);
+            //AddDepartures(context);
 
-            // if you want all linepoints comment this out these 4 lines between // // and uncomment following line
-            //AddAllLinePoints(context);
-            AddLinePoints(context);
-            //
+            //// if you want all linepoints comment this out these 4 lines between // // and uncomment following line
+            ////AddAllLinePoints(context);
+            //AddLinePoints(context);
+            ////
 
-            // if you want all stations on lines comment this out these 4 lines between // // and uncomment following line
-            //AddStations(context);
-            AddStationsOnLine3A(context);
-            AddStationsOnLine3B(context);
-            AddStationsOnLine64A(context);
-            AddStationsOnLine64B(context);
-            //
+            //// if you want all stations on lines comment this out these 4 lines between // // and uncomment following line
+            ////AddStations(context);
+            //AddStationsOnLine3A(context);
+            //AddStationsOnLine3B(context);
+            //AddStationsOnLine64A(context);
+            //AddStationsOnLine64B(context);
+            ////
 
-            AddVehicles(context);
+            //AddVehicles(context);
         }
 
         private void CreateRoles(ApplicationDbContext context)
@@ -96,20 +96,20 @@
 
             if (!context.Users.Any(u => u.UserName == "admin@yahoo.com"))
             {
-                var user = new ApplicationUser() { Id = "admin", UserName = "admin@yahoo", Email = "admin@yahoo.com", PasswordHash = ApplicationUser.HashPassword("Admin123!"), DateOfBirth = new DateTime(1996, 9, 6, 10, 02, 01)/*, UserTypeID = 1*/ };
+                var user = new ApplicationUser() { Id = "admin", UserName = "admin@yahoo", NameEncrypted="Admin", SurnameEncrypted="Admin", AdressEncrypted="AdminAdresa", StatusEncrypted="admin", EmailEncrypted = "admin@yahoo.com", PasswordHash = ApplicationUser.HashPassword("Admin123!"), DateOfBirth = new DateTime(1996, 9, 6, 10, 02, 01)/*, UserTypeID = 1*/ };
                 userManager.Create(user);
                 userManager.AddToRole(user.Id, "Admin");
             }
 
             if (!context.Users.Any(u => u.UserName == "appu@yahoo.com"))
             {
-                var user = new ApplicationUser() { Id = "appu", UserName = "appu@yahoo", Email = "appu@yahoo.com", PasswordHash = ApplicationUser.HashPassword("Appu123!"), DateOfBirth = new DateTime(1996, 9, 6, 10, 02, 01)/*,UserTypeID = 2*/ };
+                var user = new ApplicationUser() { Id = "appu", UserName = "appu@yahoo", NameEncrypted = "Appu", SurnameEncrypted = "Appu", AdressEncrypted = "Appudresa", StatusEncrypted = "not verified", EmailEncrypted = "appu@yahoo.com", PasswordHash = ApplicationUser.HashPassword("Appu123!"), DateOfBirth = new DateTime(1996, 9, 6, 10, 02, 01)/*,UserTypeID = 2*/ };
                 userManager.Create(user);
                 userManager.AddToRole(user.Id, "AppUser");
             }
             if (!context.Users.Any(u => u.UserName == "controller@yahoo.com"))
             {
-                var user = new ApplicationUser() { Id = "controller", UserName = "controller@yahoo", Email = "controller@yahoo.com", PasswordHash = ApplicationUser.HashPassword("Controller123!"), DateOfBirth = new DateTime(1996, 9, 6, 10, 02, 01)/*,UserTypeID = 2*/ };
+                var user = new ApplicationUser() { Id = "controller", UserName = "controller@yahoo", NameEncrypted = "Cont", SurnameEncrypted = "Cont", AdressEncrypted = "Contdresa", StatusEncrypted = "controller", EmailEncrypted = "controller@yahoo.com", PasswordHash = ApplicationUser.HashPassword("Controller123!"), DateOfBirth = new DateTime(1996, 9, 6, 10, 02, 01)/*,UserTypeID = 2*/ };
                 userManager.Create(user);
                 userManager.AddToRole(user.Id, "Controller");
             }
@@ -124,19 +124,19 @@
 
             if (!context.Users.Any(u => u.UserName == "anonymus@anonymus.com"))
             {
-                var user = new ApplicationUser() { Id = "anonymus", UserName = "anonymus@anonymus", Email = "anonymus@anonymus.com", PasswordHash = ApplicationUser.HashPassword("password"), DateOfBirth = new DateTime(1996, 9, 6, 10, 02, 01), UserTypeID = 1 };
+                var user = new ApplicationUser() { Id = "anonymus", UserName = "anonymus@anonymus", NameEncrypted = "Appu", SurnameEncrypted = "Appu", AdressEncrypted = "Appudresa", StatusEncrypted = "not verified", EmailEncrypted = "anonymus@anonymus.com", PasswordHash = ApplicationUser.HashPassword("password"), DateOfBirth = new DateTime(1996, 9, 6, 10, 02, 01), UserTypeID = 1 };
                 userManager.Create(user);
                 userManager.AddToRole(user.Id, "AppUser");
             }
             if (!context.Users.Any(u => u.UserName == "anonymus1@anonymus.com"))
             {
-                var user = new ApplicationUser() { Id = "anonymus1", UserName = "anonymus1@anonymus", Email = "anonymus1@anonymus.com", PasswordHash = ApplicationUser.HashPassword("password"), DateOfBirth = new DateTime(1996, 9, 6, 10, 02, 01), UserTypeID = 2 };
+                var user = new ApplicationUser() { Id = "anonymus1", UserName = "anonymus1@anonymus", NameEncrypted = "Appu", SurnameEncrypted = "Appu", AdressEncrypted = "Appudresa", StatusEncrypted = "not verified", EmailEncrypted = "anonymus1@anonymus.com", PasswordHash = ApplicationUser.HashPassword("password"), DateOfBirth = new DateTime(1996, 9, 6, 10, 02, 01), UserTypeID = 2 };
                 userManager.Create(user);
                 userManager.AddToRole(user.Id, "AppUser");
             }
             if (!context.Users.Any(u => u.UserName == "anonymus2@anonymus.com"))
             {
-                var user = new ApplicationUser() { Id = "anonymus2", UserName = "anonymus2@anonymus", Email = "anonymus2@anonymus.com", PasswordHash = ApplicationUser.HashPassword("password"), DateOfBirth = new DateTime(1996, 9, 6, 10, 02, 01), UserTypeID = 3 };
+                var user = new ApplicationUser() { Id = "anonymus2", UserName = "anonymus2@anonymus", NameEncrypted = "Appu", SurnameEncrypted = "Appu", AdressEncrypted = "Appudresa", StatusEncrypted = "not verified", EmailEncrypted = "anonymus2@anonymus.com", PasswordHash = ApplicationUser.HashPassword("password"), DateOfBirth = new DateTime(1996, 9, 6, 10, 02, 01), UserTypeID = 3 };
                 userManager.Create(user);
                 userManager.AddToRole(user.Id, "AppUser");
             }
@@ -185,7 +185,7 @@
 
         private void AddTicketAndPriceFinals(ApplicationDbContext context,Pricelist pricelist)
         {
-            Ticket ticketRegular = new Ticket() { TicketType = "regularna", UserID = "anonymus" };
+            Ticket ticketRegular = new Ticket() { TicketTypeEncrypted = "regularna", UserID = "anonymus" };
             context.Tickets.Add(ticketRegular);
             context.SaveChanges();
             ///
@@ -201,7 +201,7 @@
             context.SaveChanges();
 
 
-            Ticket ticketDaily = new Ticket() { TicketType = "dnevna", UserID = "anonymus" };
+            Ticket ticketDaily = new Ticket() { TicketTypeEncrypted = "dnevna", UserID = "anonymus" };
             context.Tickets.Add(ticketDaily);
             context.SaveChanges();
 
@@ -218,7 +218,7 @@
 
 
 
-            Ticket ticketMonthly = new Ticket() { TicketType = "mesecna", UserID = "anonymus" };
+            Ticket ticketMonthly = new Ticket() { TicketTypeEncrypted = "mesecna", UserID = "anonymus" };
             context.Tickets.Add(ticketMonthly);
             context.SaveChanges();
 
@@ -235,7 +235,7 @@
             context.SaveChanges();
 
 
-            Ticket ticketYearly = new Ticket() { TicketType = "godisnja", UserID = "anonymus" };
+            Ticket ticketYearly = new Ticket() { TicketTypeEncrypted = "godisnja", UserID = "anonymus" };
             context.Tickets.Add(ticketYearly);
             context.SaveChanges();
 

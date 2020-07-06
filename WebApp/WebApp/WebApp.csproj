@@ -271,6 +271,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\Encr.cs" />
     <Compile Include="App_Start\Exporter.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\HaversineFormula.cs" />
@@ -343,6 +344,18 @@
     <Compile Include="Migrations\202005181449569_requiredProba.cs" />
     <Compile Include="Migrations\202005181449569_requiredProba.Designer.cs">
       <DependentUpon>202005181449569_requiredProba.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202006271435120_tos property added to user.cs" />
+    <Compile Include="Migrations\202006271435120_tos property added to user.Designer.cs">
+      <DependentUpon>202006271435120_tos property added to user.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007022247334_dunno.cs" />
+    <Compile Include="Migrations\202007022247334_dunno.Designer.cs">
+      <DependentUpon>202007022247334_dunno.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007032337384_nowWhat.cs" />
+    <Compile Include="Migrations\202007032337384_nowWhat.Designer.cs">
+      <DependentUpon>202007032337384_nowWhat.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -501,6 +514,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202005181449569_requiredProba.resx">
       <DependentUpon>202005181449569_requiredProba.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006271435120_tos property added to user.resx">
+      <DependentUpon>202006271435120_tos property added to user.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007022247334_dunno.resx">
+      <DependentUpon>202007022247334_dunno.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007032337384_nowWhat.resx">
+      <DependentUpon>202007032337384_nowWhat.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

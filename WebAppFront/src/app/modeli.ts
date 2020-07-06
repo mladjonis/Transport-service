@@ -258,3 +258,75 @@ export class PayPalPaymentDetails {
         this.TransactionsItemListItemsTax = jsonData['transactions']['0']['item_list']['items']['0']['tax'];
     }
 }
+
+export class PayPalPaymentDetailsEncrypted {
+
+    Id : string
+    IntentEncrypted : string
+    StateEncrypted : string
+    CartEncrypted : string
+    CreateTimeEncrypted : string
+    PayerPaymentMethodEncrypted : string
+    PayerStatusEncrypted : string
+    PayerEmailEncrypted : string
+    PayerFirstNameEncrypted : string
+    PayerMiddleNameEncrypted : string
+    PayerLastNameEncrypted : string
+    PayerIdEncrypted : string
+    PayerCountryCodeEncrypted : string
+    ShippingAddressRecipientNameEncrypted : string
+    ShippingAddressStreetEncrypted : string
+    ShippingAddressCityEncrypted : string
+    ShippingAddressStateEncrypted : string
+    ShippingAddressPostalCodeEncrypted : number
+    ShippingAddressCountryCodeEncrypted : string
+    TransactionsAmountTotalEncrypted : number
+    TransactionsAmountCurrencyEncrypted : string
+    TransactionsDetailsSubtotalEncrypted : number
+    TransactionsDetailsShippingEncrypted : number
+    TransactionsDetailsHandlingFeeEncrypted : number
+    TransactionsDetailsInsuranceEncrypted : number
+    TransactionsShippingDiscountEncrypted : number
+    TransactionsItemListItemsNameEncrypted : string
+    TransactionsItemListItemsPriceEncrypted : number
+    TransactionsItemListItemsCurrencyEncrypted : string
+    TransactionsItemListItemsQuantityEncrypted : number
+    TransactionsItemListItemsTaxEncrypted : number
+
+
+    constructor(pp: PayPalPaymentDetails) {
+        this.Id = pp.Id;
+        this.IntentEncrypted = pp.Intent;
+        this.StateEncrypted = pp.State;
+        this.CartEncrypted = pp.Cart;
+        this.CreateTimeEncrypted = pp.CreateTime;
+        this.PayerPaymentMethodEncrypted = pp.PayerPaymentMethod;
+        this.PayerStatusEncrypted = pp.PayerStatus;
+        this.PayerEmailEncrypted = pp.PayerEmail;
+        this.PayerFirstNameEncrypted = pp.PayerFirstName;
+        this.PayerMiddleNameEncrypted = pp.PayerMiddleName;
+        this.PayerLastNameEncrypted = pp.PayerLastName;
+        this.PayerIdEncrypted = pp.PayerId;
+        this.PayerCountryCodeEncrypted = pp.PayerCountryCode;
+        this.ShippingAddressRecipientNameEncrypted = pp.ShippingAddressRecipientName;
+        this.ShippingAddressStreetEncrypted = pp.ShippingAddressStreet;
+        this.ShippingAddressCityEncrypted = pp.ShippingAddressStreet;
+        this.ShippingAddressStateEncrypted = pp.ShippingAddressState;
+        this.ShippingAddressPostalCodeEncrypted = pp.ShippingAddressPostalCode;
+        this.ShippingAddressCountryCodeEncrypted = pp.ShippingAddressCountryCode;
+        this.TransactionsAmountTotalEncrypted = pp.TransactionsAmountTotal;
+        this.TransactionsAmountCurrencyEncrypted = pp.TransactionsAmountCurrency;
+        this.TransactionsDetailsSubtotalEncrypted = pp.TransactionsDetailsSubtotal;
+        this.TransactionsDetailsShippingEncrypted = pp.TransactionsDetailsShipping;
+        this.TransactionsDetailsHandlingFeeEncrypted = pp.TransactionsDetailsHandlingFee;
+        this.TransactionsDetailsInsuranceEncrypted = pp.TransactionsDetailsInsurance;
+        this.TransactionsShippingDiscountEncrypted = pp.TransactionsShippingDiscount;
+        this.TransactionsItemListItemsNameEncrypted = pp.TransactionsItemListItemsName;
+        this.TransactionsItemListItemsPriceEncrypted = pp.TransactionsItemListItemsPrice;
+        this.TransactionsItemListItemsCurrencyEncrypted = pp.TransactionsItemListItemsCurrencty;
+        this.TransactionsItemListItemsQuantityEncrypted = pp.TransactionsItemListItemsQuantity;
+        this.TransactionsItemListItemsTaxEncrypted = pp.TransactionsItemListItemsTax;
+    }
+
+
+}

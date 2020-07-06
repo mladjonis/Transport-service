@@ -121,8 +121,8 @@ namespace WebApp.Controllers
         public async Task<IHttpActionResult> PutUser(string id, UserInfo user)
         {
 
-            ApplicationUser existingUser = UserManager.Users.Where(x => x.Id == id).FirstOrDefault();
-            
+            //ApplicationUser existingUser = UserManager.Users.Where(x => x.Id == id).FirstOrDefault();
+            var existingUser = unitOfWork.User.Get(id);
 
             if (existingUser == null)
             {
@@ -130,9 +130,9 @@ namespace WebApp.Controllers
             }
 
             //existingUser.Email = user.Email;
-            existingUser.Name = user.Name;
-            existingUser.Surname = user.Surname;
-            existingUser.Adress = user.Adress;
+            existingUser.NameEncrypted = user.Name;
+            existingUser.SurnameEncrypted = user.Surname;
+            existingUser.AdressEncrypted = user.Adress;
             if (UserManager.IsInRole(existingUser.Id, "AppUser"))
             {
                 if(user.UserType == "Obican")
@@ -146,15 +146,29 @@ namespace WebApp.Controllers
                     existingUser.UserTypeID = userType.UserTypeID;
                     existingUser.UserType = userType;
                 }
+                existingUser.DateOfBirth = DateTime.Parse(user.DateOfBirth);
+
+
             }
-            existingUser.DateOfBirth = DateTime.Parse(user.DateOfBirth);
 
-            IdentityResult result = await UserManager.UpdateAsync(existingUser);
+            //existingUser.EmailEncrypted = user.Email;
 
-            if (!result.Succeeded)
+            try
             {
-                return BadRequest();
+                unitOfWork.User.Update(existingUser);
+                unitOfWork.Complete();
             }
+            catch (Exception e)
+            {
+
+            }
+
+            //IdentityResult result = await UserManager.UpdateAsync(existingUser);
+
+            //if (!result.Succeeded)
+            //{
+            //    return BadRequest();
+            //}
 
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -668,7 +682,7 @@ namespace WebApp.Controllers
             var email = httpRequest.Form.Get("email").ToString();
 
             //check if user with that username already exists in db 
-            var dbUser = unitOfWork.User.GetAll().Where(u => u.Email == email).FirstOrDefault();
+            var dbUser = unitOfWork.User.GetAll().Where(u => u.EmailEncrypted == email).FirstOrDefault();
 
             if(dbUser != null)
             {
@@ -686,26 +700,31 @@ namespace WebApp.Controllers
 
 
             var username = $"{httpRequest.Form.Get("email").Split('@')[0]}@{httpRequest.Form.Get("email").Split('@')[1].Split('.')[0]}";
-            var user = new ApplicationUser() {
+            bool.TryParse(httpRequest.Form.Get("tos"),out bool res);
+            var user = new ApplicationUser()
+            {
                 Id = httpRequest.Form.Get("email").Split('@')[0],
-                UserName = username, 
-                Email = httpRequest.Form.Get("email"),
+                UserName = username,
+                EmailEncrypted = httpRequest.Form.Get("email"),
                 PasswordHash = ApplicationUser.HashPassword(httpRequest.Form.Get("password")),
                 DateOfBirth = DateTime.Parse(httpRequest.Form.Get("date")),
-                Adress = httpRequest.Form.Get("address"),
-                Name = httpRequest.Form.Get("name"),
-                Surname = httpRequest.Form.Get("surname"),
-                Status = status,
+                AdressEncrypted = httpRequest.Form.Get("address"),
+                NameEncrypted = httpRequest.Form.Get("name"),
+                SurnameEncrypted = httpRequest.Form.Get("surname"),
+                StatusEncrypted = status,
                 UserTypeID = userType.UserTypeID,
                 Files = "",
-                AcceptedTOS = bool.Parse(httpRequest.Form.Get("tos"))
+                AcceptedTOS = res
             };
 
-            IdentityResult result = UserManager.Create(user);
+            //IdentityResult result = UserManager.Create(user);
+            unitOfWork.User.Add(user);
+            unitOfWork.Complete();
 
-            if (!result.Succeeded)
+            //if (!result.Succeeded)
+            if(unitOfWork.User.Get(user.Id)==null)
             {
-                return GetErrorResult(result);
+                ///return GetErrorResult(result);
             } else
             {
                 UserManager.AddToRole(user.Id, "AppUser");
@@ -740,8 +759,9 @@ namespace WebApp.Controllers
                         else
                             user.Files = string.Join(",", uploadedFiles);
 
-                        user.Status = "processing";
-                        UserManager.Update(user);
+                        user.StatusEncrypted = "processing";
+                        unitOfWork.User.Update(user);
+                        unitOfWork.Complete();
                     }
                 }
             }
@@ -787,7 +807,7 @@ namespace WebApp.Controllers
         [HttpGet]
         public List<ApplicationUser> GetProcessingUsers()
         {
-            return UserManager.Users.ToList().FindAll(x => x.Status == "processing");
+            return UserManager.Users.ToList().FindAll(x => x.StatusEncrypted == "processing");
         }
 
         [Route("VerifyUser")]
@@ -809,8 +829,9 @@ namespace WebApp.Controllers
                 return BadRequest();
             }
 
-            user.Status = "verified";
-            UserManager.Update(user);
+            user.StatusEncrypted = "verified";
+            unitOfWork.User.Update(user);
+            unitOfWork.Complete();
 
             return Ok();
         }
@@ -832,8 +853,9 @@ namespace WebApp.Controllers
                 return BadRequest();
             }
 
-            user.Status = "denied";
-            UserManager.Update(user);
+            user.StatusEncrypted = "denied";
+            unitOfWork.User.Update(user);
+            unitOfWork.Complete();
 
 
             return Ok();
@@ -857,7 +879,8 @@ namespace WebApp.Controllers
             if (removeResult.Succeeded)
             {
                 UserManager.AddToRole(id, role);
-                UserManager.Update(user);
+                unitOfWork.User.Update(user);
+                unitOfWork.Complete();
                 return Ok();
             } else
             {
@@ -882,7 +905,8 @@ namespace WebApp.Controllers
             if (removeResult.Succeeded)
             {
                 UserManager.AddToRole(id, "AppUser");
-                UserManager.Update(user);
+                unitOfWork.User.Update(user);
+                unitOfWork.Complete();
                 return Ok();
             }
             else
@@ -936,9 +960,9 @@ namespace WebApp.Controllers
                 //user.Files = string.Join(",", uploadedFiles);
                 user.Files = uploadedFiles[0];
 
-            user.Status = "processing";
-            UserManager.Update(user);
-
+            user.StatusEncrypted = "processing";
+            unitOfWork.User.Update(user);
+            unitOfWork.Complete();
             return Ok(user.Files);
         }
 
@@ -964,10 +988,8 @@ namespace WebApp.Controllers
         [Route("Export")]
         public IHttpActionResult Export([FromUri]string exportType)
         {
-            //var userId = User.Identity.GetUserId();
-            //var user = unitOfWork.User.Get(userId);
-            var user = unitOfWork.User.Get("appu");
-            var userId = user.Id;
+            var userId = User.Identity.GetUserId();
+            var user = unitOfWork.User.Get(userId);
             var usertype = ConvertIntToString(user.UserType.TypeOfUser);
             DataLinks links;
             try
@@ -996,7 +1018,7 @@ namespace WebApp.Controllers
                             DirectoryInfo corpus = new DirectoryInfo(folderPath);
                             archive.CreateEntries(corpus);
                             archive.Save(zipFile);
-                            return GetDocuments(userPath, user.Name, "zip");
+                            return GetDocuments(userPath, user.NameEncrypted, "zip");
                         }
                     //return GetDocuments(userPath, user.Name, "csv");
                     //return GetDocuments(userPath, user.Name, "pdf");
@@ -1010,17 +1032,17 @@ namespace WebApp.Controllers
                     using (FileStream zipFile = File.Open(userPath + $"\\{user.Name}CSV.zip", FileMode.Create))
                     {
                         // Files to be added to archive
-                        FileInfo fi1 = new FileInfo($"{userPath}\\{user.Name}{user.Surname}.csv");
-                        FileInfo fi2 = new FileInfo($"{userPath}\\{user.Name}{user.Surname}PayPal.csv");
+                        FileInfo fi1 = new FileInfo($"{userPath}\\{user.NameEncrypted}{user.SurnameEncrypted}.csv");
+                        FileInfo fi2 = new FileInfo($"{userPath}\\{user.NameEncrypted}{user.SurnameEncrypted}PayPal.csv");
 
                         using (var archive = new Archive())
                         {
-                            archive.CreateEntry($"{userPath}\\{user.Name}{user.Surname}.csv", fi1);
-                            archive.CreateEntry($"{userPath}\\{user.Name}{user.Surname}PayPal.csv", fi2);
+                            archive.CreateEntry($"{userPath}\\{user.NameEncrypted}{user.SurnameEncrypted}.csv", fi1);
+                            archive.CreateEntry($"{userPath}\\{user.NameEncrypted}{user.SurnameEncrypted}PayPal.csv", fi2);
                             archive.Save(zipFile, new ArchiveSaveOptions() { Encoding = Encoding.UTF8 });
                         }
                     }
-                    return GetDocuments(userPath, $"{user.Name}CSV", "zip");
+                    return GetDocuments(userPath, $"{user.NameEncrypted}CSV", "zip");
 
 
                 }
@@ -1028,7 +1050,7 @@ namespace WebApp.Controllers
                 {
                     Exporter.ExportPdf(userPath, user, usertype, localHost, imgPath, out Uri dataPdfPath);
                     links = new DataLinks(null, null, dataPdfPath);
-                    return GetDocuments(userPath, user.Name, "pdf");
+                    return GetDocuments(userPath, user.NameEncrypted, "pdf");
                 }
                 else
                 {

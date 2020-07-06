@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { AuthHttpService } from 'src/app/services/auth.service';
-import { PayPalPaymentDetails } from '../modeli';
+import { PayPalPaymentDetails, PayPalPaymentDetailsEncrypted } from '../modeli';
 import { MatTableDataSource } from '@angular/material';
 import { TicketService } from '../services/ticket.service';
 import { ThemePalette } from '@angular/material/core';
@@ -59,7 +59,7 @@ export class CenovnikComponent implements OnInit, OnDestroy {
   paypalConfig = {
     env: 'sandbox',
     client: {
-      sandbox: '<your-sandbox-key here>',
+      sandbox: 'AYd0Uim6_hlWm4Xxhwc2FheQPv8IsxxVurGXhD-wWFH8nVrN9LdLDO3Y1B2yH0y3pvaLCa8ZePkU4D2j',
       production: '<your-production-key here>'
     },
     commit: true,
@@ -95,7 +95,9 @@ export class CenovnikComponent implements OnInit, OnDestroy {
       return actions.payment.execute()
         .then(payPalPaymentDetails =>  {
           let paymentDetailsObj = new PayPalPaymentDetails(payPalPaymentDetails);
-          this.buyTicket(this.tipKarte,JSON.stringify(paymentDetailsObj));
+          let encryptedPP = new PayPalPaymentDetailsEncrypted(paymentDetailsObj);
+          // this.buyTicket(this.tipKarte,JSON.stringify(paymentDetailsObj));
+          this.buyTicket(this.tipKarte,JSON.stringify(encryptedPP));
         });
     },
     onError: (err) => {
@@ -121,12 +123,12 @@ export class CenovnikComponent implements OnInit, OnDestroy {
 
   private CanBuyCard(userTickets: any) {
     userTickets.forEach(ticket=>{
-      if(ticket.TicketType == "godisnja"){
+      if(ticket.TicketTypeEncrypted == "godisnja"){
         if(!this.IsTicketValid(ticket)){
           console.log(' godisnja nije validna');
           this.godisnjaValidna = false;
         }
-      }else if (ticket.TicketType == "mesecna") {
+      }else if (ticket.TicketTypeEncrypted == "mesecna") {
         if(!this.IsTicketValid(ticket)){
           console.log('mesecna nije validna');
           this.mesecnaValidna = false;
@@ -166,7 +168,7 @@ export class CenovnikComponent implements OnInit, OnDestroy {
         returnData = [...dataTemplate, ...returnData];
         returnData.splice(12);
         data = [...returnData];
-        if(!name){
+        if(!name && !role){
           data[0].Buyable = true;
         }
         else {
@@ -174,14 +176,14 @@ export class CenovnikComponent implements OnInit, OnDestroy {
           if(role == "AppUser" && user.AcceptedTOS == true){
             this.acceptedTOS = true;
             user.UserTypeStringID = this.userService.ConvertTypeOfUserToString(user.UserType.TypeOfUser);
-            if(user.Status != "verified"){
+            if(user.StatusEncrypted != "verified"){
               data[0].Buyable = true;
             }
-            else if(user.Status == "verified" && user.UserTypeStringID == "Student"){
+            else if(user.StatusEncrypted == "verified" && user.UserTypeStringID == "Student"){
               for(let i=4,j=0; i<8; i++, j++){
                 this.CanBuyCard(user.Tickets);
                 data[i].Buyable = true;
-                if(user.Tickets.filter(ticket=> ticket.TicketType == "mesecna" || ticket.TicketType == "godisnja").length > 0){
+                if(user.Tickets.filter(ticket=> ticket.TicketTypeEncrypted == "mesecna" || ticket.TicketTypeEncrypted == "godisnja").length > 0){
                   if(this.godisnjaValidna && this.expiresSoon){
                     data[3].Buyable = true;
                   }else {
@@ -198,11 +200,11 @@ export class CenovnikComponent implements OnInit, OnDestroy {
                 data[j]=asa;
               }
             }
-            else if(user.Status == "verified" && user.UserTypeStringID == "Obican"){
+            else if(user.StatusEncrypted == "verified" && user.UserTypeStringID == "Obican"){
               for(let i=0,j=0;i<4;i++,j++){
                 this.CanBuyCard(user.Tickets);
                 data[i].Buyable = true;
-                if(user.Tickets.filter((ticket:any)=> ticket['TicketType'] == "mesecna" || ticket['TicketType'] == "godisnja").length > 0){
+                if(user.Tickets.filter((ticket:any)=> ticket['TicketTypeEncrypted'] == "mesecna" || ticket['TicketTypeEncrypted'] == "godisnja").length > 0){
                   if(this.godisnjaValidna && this.expiresSoon){
                     data[3].Buyable = true;
                   }else {
@@ -220,7 +222,7 @@ export class CenovnikComponent implements OnInit, OnDestroy {
               for(let i=8,j=0;i<12;i++,j++){
                 this.CanBuyCard(user.Tickets);
                 data[i].Buyable = true;
-                if(user.Tickets.filter(ticket=> ticket.TicketType == "mesecna" || ticket.TicketType == "godisnja").length > 0){
+                if(user.Tickets.filter(ticket=> ticket.TicketTypeEncrypted == "mesecna" || ticket.TicketTypeEncrypted == "godisnja").length > 0){
                   if(this.godisnjaValidna && this.expiresSoon){
                     data[3].Buyable = true;
                   }else {

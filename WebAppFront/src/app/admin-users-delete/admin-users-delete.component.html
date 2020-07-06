@@ -3,7 +3,7 @@
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 lines">
     <ng-container matColumnDef="Email">
       <th mat-header-cell *matHeaderCellDef> Email </th>
-      <td mat-cell *matCellDef="let element" [ngClass] = "{'td-not-allowed': !element.Clickable}"> {{element.Email}} </td>
+      <td mat-cell *matCellDef="let element" [ngClass] = "{'td-not-allowed': !element.Clickable}"> {{element.EmailEncrypted}} </td>
     </ng-container>
     <ng-container matColumnDef="Role">
         <th mat-header-cell *matHeaderCellDef> Dodeljena uloga </th>
@@ -16,7 +16,7 @@
 
   <div *ngFor="let selected of selectedRows" class="day-buttons">
     <div class="card">
-      <div class="fakeimg">Izabrani korisnik: {{selected.Email}}</div>
+      <div class="fakeimg">Izabrani korisnik: {{selected.EmailEncrypted}}</div>
       <button mat-flat-button color="primary" (click)="RemoveUser(selected)">Izbrisi korisnika</button>
     </div>
   </div>

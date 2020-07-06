@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;
+using Microsoft.Owin.Security.DataProtection;
 using Owin;
 
 [assembly: OwinStartup(typeof(WebApp.Startup))]
