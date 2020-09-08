@@ -13,11 +13,13 @@ namespace WebApp.App_Start
         public static string EncapsulateByteArray(byte[] array)
         {
             return Convert.ToBase64String(array);
+            //return Encoding.Unicode.GetString(array);
         }
 
         public static byte[] EncapsulateString(string plainText)
         {
             return Convert.FromBase64String(plainText);
+            //return Encoding.Unicode.GetBytes(plainText);
         }
 
         public static byte[] EncapsulateInt(int value)
@@ -32,6 +34,11 @@ namespace WebApp.App_Start
             return BitConverter.GetBytes(value);
         }
 
+        public static double DecapsulateDouble(byte[] array)
+        {
+            return BitConverter.ToDouble(array, 0);
+        }
+
         public static byte[] EncapsulateLong(long value)
         {
             //return Convert.FromBase64String(value.ToString());
@@ -44,7 +51,7 @@ namespace WebApp.App_Start
             {
                 CspParameters cspp = new CspParameters();
                 RSACryptoServiceProvider rsa;
-                const string keyName = "KeyRSA";
+                const string keyName = "KRSA";
                 cspp.KeyContainerName = keyName;
                 cspp.Flags = CspProviderFlags.UseMachineKeyStore;
                 rsa = new RSACryptoServiceProvider(cspp)
@@ -59,8 +66,8 @@ namespace WebApp.App_Start
                     //initialization
                     myRijndael.Mode = CipherMode.CBC;
                     myRijndael.Padding = PaddingMode.PKCS7;
-                    myRijndael.KeySize = 256;
-                    myRijndael.BlockSize = 128;
+                    //myRijndael.KeySize = 256;
+                    //myRijndael.BlockSize = 128;
                     myRijndael.GenerateKey();
 
                     rsa.ImportParameters(publicKey);
@@ -70,7 +77,7 @@ namespace WebApp.App_Start
                         Directory.CreateDirectory(@"C:\Rijn\");
                     }
 
-                    using (var writer = new BinaryWriter(File.Open(@"C:\Rijn\rijnKey.bin", FileMode.OpenOrCreate)))
+                    using (var writer = new BinaryWriter(File.Open(@"C:\Rijn\rijnK.bin", FileMode.OpenOrCreate)))
                     {
                         writer.Write(keyEncrypted);
                     }
@@ -87,7 +94,7 @@ namespace WebApp.App_Start
                 throw new ArgumentNullException("plainText");
             CspParameters cspp = new CspParameters();
             RSACryptoServiceProvider rsa;
-            const string keyName = "KeyRSA";
+            const string keyName = "KRSA";
             cspp.KeyContainerName = keyName;
             cspp.Flags = CspProviderFlags.UseMachineKeyStore;
             rsa = new RSACryptoServiceProvider(cspp)
@@ -96,7 +103,7 @@ namespace WebApp.App_Start
             };
             var privateKey = rsa.ExportParameters(true);
 
-            byte[] RijnKeyEncrypted = File.ReadAllBytes(@"C:\Rijn\rijnKey.bin");
+            byte[] RijnKeyEncrypted = File.ReadAllBytes(@"C:\Rijn\rijnK.bin");
             rsa.ImportParameters(privateKey);
             byte[] Key = rsa.Decrypt(RijnKeyEncrypted, false);
             byte[] encrypted;
@@ -105,8 +112,8 @@ namespace WebApp.App_Start
             {
                 rijAlg.Mode = CipherMode.CBC;
                 rijAlg.Padding = PaddingMode.PKCS7;
-                rijAlg.KeySize = 256;
-                rijAlg.BlockSize = 128;
+                //rijAlg.KeySize = 256;
+                //rijAlg.BlockSize = 128;
 
                 rijAlg.Key = Key;
                 rijAlg.GenerateIV();
@@ -118,10 +125,11 @@ namespace WebApp.App_Start
                 {
                     using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
                     {
-                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt, Encoding.Default))
+                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
                         {
                             swEncrypt.Write(plainText);
                         }
+                        //csEncrypt.FlushFinalBlock();
                         encrypted = msEncrypt.ToArray();
                     }
                 }
@@ -139,7 +147,7 @@ namespace WebApp.App_Start
                 throw new ArgumentNullException("cipherText");
             CspParameters cspp = new CspParameters();
             RSACryptoServiceProvider rsa;
-            const string keyName = "KeyRSA";
+            const string keyName = "KRSA";
             cspp.KeyContainerName = keyName;
             cspp.Flags = CspProviderFlags.UseMachineKeyStore;
             rsa = new RSACryptoServiceProvider(cspp)
@@ -148,7 +156,7 @@ namespace WebApp.App_Start
             };
             var privateKey = rsa.ExportParameters(true);
 
-            byte[] RijnKeyEncrypted = File.ReadAllBytes(@"C:\Rijn\rijnKey.bin");
+            byte[] RijnKeyEncrypted = File.ReadAllBytes(@"C:\Rijn\rijnK.bin");
             rsa.ImportParameters(privateKey);
             byte[] Key = rsa.Decrypt(RijnKeyEncrypted, false);
             string plaintext = null;
@@ -156,8 +164,8 @@ namespace WebApp.App_Start
             {
                 rijAlg.Mode = CipherMode.CBC;
                 rijAlg.Padding = PaddingMode.PKCS7;
-                rijAlg.KeySize = 256;
-                rijAlg.BlockSize = 128;
+                //rijAlg.KeySize = 256;
+                //rijAlg.BlockSize = 128;
 
                 rijAlg.Key = Key;
 
@@ -175,10 +183,11 @@ namespace WebApp.App_Start
                 {
                     using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
                     {
-                        using (StreamReader srDecrypt = new StreamReader(csDecrypt, Encoding.Default))
+                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
                         {
                             plaintext = srDecrypt.ReadToEnd();
                         }
+                        //csDecrypt.Flush();
                     }
                 }
             }

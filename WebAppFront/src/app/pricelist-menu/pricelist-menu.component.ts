@@ -46,10 +46,10 @@ export class PricelistMenuComponent implements OnInit, OnDestroy {
         let data = JSON.parse(result.data);
         console.log(data);
         
-        data.PriceFinals[data.PriceFinals.findIndex(x=>x.Ticket.TicketType == "regularna")].Price = result.regularna;
-        data.PriceFinals[data.PriceFinals.findIndex(x=>x.Ticket.TicketType == "dnevna")].Price = result.dnevna;
-        data.PriceFinals[data.PriceFinals.findIndex(x=>x.Ticket.TicketType == "mesecna")].Price = result.mesecna;
-        data.PriceFinals[data.PriceFinals.findIndex(x=>x.Ticket.TicketType == "godisnja")].Price = result.godisnja;
+        data.PriceFinals[data.PriceFinals.findIndex(x=>x.Ticket.TicketTypeEncrypted == "regularna")].Price = result.regularna;
+        data.PriceFinals[data.PriceFinals.findIndex(x=>x.Ticket.TicketTypeEncrypted == "dnevna")].Price = result.dnevna;
+        data.PriceFinals[data.PriceFinals.findIndex(x=>x.Ticket.TicketTypeEncrypted == "mesecna")].Price = result.mesecna;
+        data.PriceFinals[data.PriceFinals.findIndex(x=>x.Ticket.TicketTypeEncrypted == "godisnja")].Price = result.godisnja;
         this.subscription.add(this.pricelistService.EditPricelist(result.pricelistId,data).subscribe(data=>{
           console.log(data);
         },err=>{

@@ -71,16 +71,16 @@ namespace WebApp.App_Start
 
             Cell cell11 = new Cell(1, 1)
                 .SetTextAlignment(TextAlignment.CENTER)
-                .Add(new Paragraph(user.Name));
+                .Add(new Paragraph(user.NameEncrypted));
 
             Cell cell12 = new Cell(1, 1)
                 .SetTextAlignment(TextAlignment.CENTER)
-                .Add(new Paragraph(user.Surname));
+                .Add(new Paragraph(user.SurnameEncrypted));
 
 
             Cell cell13 = new Cell(1, 1)
                 .SetTextAlignment(TextAlignment.CENTER)
-                .Add(new Paragraph(user.Email));
+                .Add(new Paragraph(user.EmailEncrypted));
 
 
             Cell cell14 = new Cell(1, 1)
@@ -139,7 +139,7 @@ namespace WebApp.App_Start
 
                     Cell cell4 = new Cell(1, 1)
                         .SetTextAlignment(TextAlignment.CENTER)
-                        .Add(new Paragraph(ticket.PayPalPaymentDetails.TransactionsItemListItemsPriceEncrypted.ToString()));
+                        .Add(new Paragraph(ticket.PayPalPaymentDetails.TransactionsItemListItemsPriceEncrypted));
 
 
                     Cell cell5 = new Cell(1, 1)
@@ -153,7 +153,7 @@ namespace WebApp.App_Start
 
                     Cell cell7 = new Cell(1, 1)
                         .SetTextAlignment(TextAlignment.CENTER)
-                        .Add(new Paragraph(ticket.PayPalPaymentDetails.ShippingAddressPostalCodeEncrypted.ToString()));
+                        .Add(new Paragraph(ticket.PayPalPaymentDetails.ShippingAddressPostalCodeEncrypted));
 
                     payPalTable.AddCell(cell1).AddCell(cell2).AddCell(cell3).AddCell(cell4).AddCell(cell5).AddCell(cell6).AddCell(cell7);
                     document.Add(newline);
@@ -182,7 +182,7 @@ namespace WebApp.App_Start
                 var ticketString = $"Datum kupovine,Tip karte,Cena RSD,Cena EUR,Adresa grada,ZIP drzave, ZIP grada\n";
                 foreach (var ticket in user.Tickets)
                 {
-                    ticketString += $"{ticket.PayPalPaymentDetails.CreateTimeEncrypted},{ticket.TicketTypeEncrypted},{ticket.PriceRSD},{ticket.PayPalPaymentDetails.TransactionsItemListItemsPriceEncrypted},{ticket.PayPalPaymentDetails.ShippingAddressCityEncrypted},{ticket.PayPalPaymentDetails.ShippingAddressCountryCodeEncrypted},{ticket.PayPalPaymentDetails.ShippingAddressPostalCodeEncrypted}\n";
+                    ticketString += $"{ticket.PayPalPaymentDetails.CreateTimeEncrypted},{ticket.TicketTypeEncrypted},{ticket.PriceRSD},{ticket.PayPalPaymentDetails.TransactionsItemListItemsPriceEncrypted},{ticket.PayPalPaymentDetails.ShippingAddressCityEncrypted},{ticket.PayPalPaymentDetails.ShippingAddressCountryCodeEncrypted}\n"; //,{ticket.PayPalPaymentDetails.ShippingAddressPostalCodeEncrypted}
                 }
                 stream.WriteLine(ticketString);
             }

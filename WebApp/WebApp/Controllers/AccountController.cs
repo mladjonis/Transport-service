@@ -21,6 +21,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
+using Microsoft.Owin.StaticFiles.ContentTypes;
 using WebApp.App_Start;
 using WebApp.Models;
 using WebApp.Persistence.UnitOfWork;
@@ -584,8 +585,9 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByEmailAsync(resetPasswordBindingModel.Email);
-                if(user != null)
+                //var user = await UserManager.FindByEmailAsync(resetPasswordBindingModel.Email);
+                var user = unitOfWork.User.GetAll().Where(u => u.EmailEncrypted == resetPasswordBindingModel.Email).FirstOrDefault();
+                if (user != null)
                 {
                     var resetPasswordResult = await UserManager.ResetPasswordAsync(user.Id, resetPasswordBindingModel.Token, resetPasswordBindingModel.NewPassword);
 
@@ -607,7 +609,8 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> ForgotPassword(PasswordRecovery model)
         {
-            var user = await UserManager.FindByEmailAsync(model.Email);
+            //var user = await UserManager.FindByEmailAsync(model.Email);
+            var user = unitOfWork.User.GetAll().Where(u => u.EmailEncrypted == model.Email).FirstOrDefault();
             var emailConfirmed = await UserManager.IsEmailConfirmedAsync(user.Id);
 
             if (user != null && emailConfirmed == true)
@@ -620,7 +623,7 @@ namespace WebApp.Controllers
 
 
                 var confirmationLinkFrontend = new Uri("http://localhost:4200/password-recovery").AddQuery("email",model.Email).AddQuery("token", passwordResetToken);
-                SendEMailHelper.Send(user.Email, "Reset your password for transport service", "Please confirm your password reset by clicking <a href=\"" + confirmationLinkFrontend + "\">here</a>");
+                SendEMailHelper.Send(user.EmailEncrypted, "Reset your password for transport service", "Please confirm your password reset by clicking <a href=\"" + confirmationLinkFrontend + "\">here</a>");
             }
 
             return Ok("If you have account with that email address on our platform you will recieve link for password reset.");
@@ -631,10 +634,14 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> ResendConfirmationEmail(EmailConfirmationRecovery model)
         {
-            var user = await UserManager.FindByEmailAsync(model.Email);
+            var user = unitOfWork.User.GetAll().Where(u => u.EmailEncrypted == model.Email).FirstOrDefault();
 
-            if(user != null)
+            if (user != null)
             {
+                var em = user.EmailEncrypted;
+                user.Email = em;
+                unitOfWork.User.Update(user);
+                unitOfWork.Complete();
                 var emailToken = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
 
                 //mvc
@@ -642,7 +649,9 @@ namespace WebApp.Controllers
 
                 var confirmationLinkFrontend = new Uri("http://localhost:4200/email-send").AddQuery("email", model.Email).AddQuery("token", emailToken);
                 SendEMailHelper.Send(user.Email, "Confirm your email for transport service", "Please confirm your email by clicking <a href=\"" + confirmationLinkFrontend + "\">here</a>");
-
+                user.EmailEncrypted = em;
+                unitOfWork.User.Update(user);
+                unitOfWork.Complete();
             }
 
             return Ok();
@@ -653,12 +662,21 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> ConfirmEmail(EmailConfirmation model)
         {
-            var user = await UserManager.FindByEmailAsync(model.Email);
+            var user = unitOfWork.User.GetAll().Where(u => u.EmailEncrypted == model.Email).FirstOrDefault();
+            var em = user.EmailEncrypted;
             if (user != null)
             {
+                user.Email = em;
+                unitOfWork.User.Update(user);
+                unitOfWork.Complete();
+                //var emailToken = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                 IdentityResult result = await UserManager.ConfirmEmailAsync(user.Id, model.Token);
                 if (result.Succeeded)
                 {
+                    user.EmailEncrypted = em;
+                    user.EmailConfirmed = true;
+                    unitOfWork.User.Update(user);
+                    unitOfWork.Complete();
                     return Ok("Uspesno potvrdjen e-mail");
                 }
                 else
@@ -716,7 +734,8 @@ namespace WebApp.Controllers
                 Files = "",
                 AcceptedTOS = res
             };
-
+            UserManager.UpdateSecurityStamp(user.Id);
+            unitOfWork.Complete();
             //IdentityResult result = UserManager.Create(user);
             unitOfWork.User.Add(user);
             unitOfWork.Complete();
@@ -728,6 +747,10 @@ namespace WebApp.Controllers
             } else
             {
                 UserManager.AddToRole(user.Id, "AppUser");
+                var em = user.EmailEncrypted;
+                user.Email = em;
+                unitOfWork.User.Update(user);
+                unitOfWork.Complete();
 
                 var emailToken = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
 
@@ -736,7 +759,11 @@ namespace WebApp.Controllers
 
                 SendEMailHelper.Send(user.Email, "Confirm your email for transport service", "Please confirm your email by clicking <a href=\"" + confirmationLinkFrontend + "\">here</a>");
 
-                if(httpRequest.Files.Count > 0)
+                user.EmailEncrypted = em;
+                unitOfWork.User.Update(user);
+                unitOfWork.Complete();
+
+                if (httpRequest.Files.Count > 0)
                 {
                     var path = GetUserFolderPath(user.Id);
                     CreateUserFolder(path);
@@ -817,9 +844,10 @@ namespace WebApp.Controllers
         {
             var a = UserManager.Users.ToList();
 
-            var user = UserManager.Users.FirstOrDefault(x => x.Id == id);
+            //var user = UserManager.Users.FirstOrDefault(x => x.Id == id);
+            var user = unitOfWork.User.Get(id);
 
-            if(user == null)
+            if (user == null)
             {
                 return BadRequest("User does not exists");
             }
@@ -841,7 +869,8 @@ namespace WebApp.Controllers
         [HttpPut]
         public IHttpActionResult DenyUser([FromUri]string id)
         {
-            var user = UserManager.Users.FirstOrDefault(x => x.Id == id);
+            //var user = UserManager.Users.FirstOrDefault(x => x.Id == id);
+            var user = unitOfWork.User.Get(id);
 
             if (user == null)
             {
@@ -873,13 +902,21 @@ namespace WebApp.Controllers
                 return BadRequest("User does not exists");
             }
 
+            var em = user.EmailEncrypted;
+            user.Email = em;
+            UserManager.Update(user);
+            unitOfWork.Complete();
             var userRoles = UserManager.GetRoles(id).ToArray();
             var removeResult = UserManager.RemoveFromRoles(id, userRoles);
 
             if (removeResult.Succeeded)
             {
                 UserManager.AddToRole(id, role);
-                unitOfWork.User.Update(user);
+                UserManager.Update(user);
+                //unitOfWork.User.Update(user);
+                unitOfWork.Complete();
+                user.EmailEncrypted = em;
+                UserManager.Update(user);
                 unitOfWork.Complete();
                 return Ok();
             } else
@@ -900,12 +937,21 @@ namespace WebApp.Controllers
                 return BadRequest("User does not exists");
             }
 
+            var em = user.EmailEncrypted;
+            user.Email = em;
+            UserManager.Update(user);
+            unitOfWork.Complete();
+
             var userRoles = UserManager.GetRoles(id).ToArray();
             var removeResult = UserManager.RemoveFromRoles(id, userRoles);
             if (removeResult.Succeeded)
             {
                 UserManager.AddToRole(id, "AppUser");
-                unitOfWork.User.Update(user);
+                UserManager.Update(user);
+                //unitOfWork.User.Update(user);
+                unitOfWork.Complete();
+                user.EmailEncrypted = em;
+                UserManager.Update(user);
                 unitOfWork.Complete();
                 return Ok();
             }
@@ -924,7 +970,8 @@ namespace WebApp.Controllers
 
             var userId = User.Identity.GetUserId();
 
-            var user = UserManager.Users.FirstOrDefault(x => x.Id == userId);
+            //var user = UserManager.Users.FirstOrDefault(x => x.Id == userId);
+            var user = unitOfWork.User.Get(userId);
 
             if (user == null)
                 return BadRequest("User does not exist");
@@ -961,6 +1008,7 @@ namespace WebApp.Controllers
                 user.Files = uploadedFiles[0];
 
             user.StatusEncrypted = "processing";
+            ///UserManager.Update(user);
             unitOfWork.User.Update(user);
             unitOfWork.Complete();
             return Ok(user.Files);
@@ -989,6 +1037,7 @@ namespace WebApp.Controllers
         public IHttpActionResult Export([FromUri]string exportType)
         {
             var userId = User.Identity.GetUserId();
+            //var userId = "lukaja.jr";
             var user = unitOfWork.User.Get(userId);
             var usertype = ConvertIntToString(user.UserType.TypeOfUser);
             DataLinks links;
@@ -1012,14 +1061,20 @@ namespace WebApp.Controllers
                     links = new DataLinks(dataPath, ppPath, dataPdfPath);
                     string[] stringSeparators = new string[] { $"\\{user.Id}" };
                     //ne moze se zipovati onaj direktorijum koji koristimo promeniti puvanju na bude u istoj ravnini sa appu a ne u appu
-                    using (FileStream zipFile = File.Open(userPath.Split(stringSeparators, StringSplitOptions.None)[0]+$"\\{user.Name}.zip", FileMode.Create))
+                    using (FileStream zipFile = File.Open(userPath.Split(stringSeparators, StringSplitOptions.None)[0] + $"\\{user.NameEncrypted}.zip", FileMode.Create))
+                    {
                         using (Archive archive = new Archive())
                         {
                             DirectoryInfo corpus = new DirectoryInfo(folderPath);
                             archive.CreateEntries(corpus);
                             archive.Save(zipFile);
-                            return GetDocuments(userPath, user.NameEncrypted, "zip");
+                            archive.Dispose();
+                            //return GetDocuments(userPath.Split(stringSeparators, StringSplitOptions.None)[0], user.NameEncrypted, "zip");
                         }
+                        zipFile.Close();
+                    }
+                    return GetDocuments(userPath.Split(stringSeparators, StringSplitOptions.None)[0], user.NameEncrypted, "zip");
+
                     //return GetDocuments(userPath, user.Name, "csv");
                     //return GetDocuments(userPath, user.Name, "pdf");
 
@@ -1029,7 +1084,7 @@ namespace WebApp.Controllers
                     Exporter.ExportCsv(userPath, user, usertype, localHost, out Uri dataPath, out Uri ppPath);
                     links = new DataLinks(dataPath, ppPath, null);
 
-                    using (FileStream zipFile = File.Open(userPath + $"\\{user.Name}CSV.zip", FileMode.Create))
+                    using (FileStream zipFile = File.Open(userPath + $"\\{user.NameEncrypted}CSV.zip", FileMode.Create))
                     {
                         // Files to be added to archive
                         FileInfo fi1 = new FileInfo($"{userPath}\\{user.NameEncrypted}{user.SurnameEncrypted}.csv");
@@ -1050,7 +1105,7 @@ namespace WebApp.Controllers
                 {
                     Exporter.ExportPdf(userPath, user, usertype, localHost, imgPath, out Uri dataPdfPath);
                     links = new DataLinks(null, null, dataPdfPath);
-                    return GetDocuments(userPath, user.NameEncrypted, "pdf");
+                    return GetDocuments(userPath, user.NameEncrypted + user.SurnameEncrypted, "pdf");
                 }
                 else
                 {
@@ -1069,13 +1124,19 @@ namespace WebApp.Controllers
 
         private IHttpActionResult GetDocuments(string userPath,string name, string docType)
         {
-            var file = File.ReadAllBytes(userPath+ $"/{name}.{docType}");
+            var file = File.ReadAllBytes(userPath+ $"\\{name}.{docType}");
             IHttpActionResult response;
-            HttpResponseMessage responseMsg = new HttpResponseMessage(HttpStatusCode.OK);
-            responseMsg.Content = new ByteArrayContent(file);
+            HttpResponseMessage responseMsg = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(file)
+            };
             responseMsg.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
             responseMsg.Content.Headers.ContentDisposition.FileName = $"{name}.{docType}";
-            responseMsg.Content.Headers.ContentType = new MediaTypeHeaderValue($"application/{docType}");
+            //responseMsg.Content.Headers.ContentType = new MediaTypeHeaderValue($"application/{docType}");
+            //responseMsg.Content.Headers.ContentType = new MediaTypeHeaderValue(MimeMapping.GetMimeMapping(docType));
+            string contentType;
+            new FileExtensionContentTypeProvider().TryGetContentType($"{name}.{docType}", out contentType);
+            responseMsg.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType ?? "application/octet-stream");
             response = ResponseMessage(responseMsg);
             return response;
         }

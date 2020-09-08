@@ -96,8 +96,9 @@ export class CenovnikComponent implements OnInit, OnDestroy {
         .then(payPalPaymentDetails =>  {
           let paymentDetailsObj = new PayPalPaymentDetails(payPalPaymentDetails);
           let encryptedPP = new PayPalPaymentDetailsEncrypted(paymentDetailsObj);
-          // this.buyTicket(this.tipKarte,JSON.stringify(paymentDetailsObj));
+          //this.buyTicket(this.tipKarte,JSON.stringify(paymentDetailsObj));
           this.buyTicket(this.tipKarte,JSON.stringify(encryptedPP));
+          console.log(payPalPaymentDetails);
         });
     },
     onError: (err) => {
@@ -286,7 +287,7 @@ export class CenovnikComponent implements OnInit, OnDestroy {
     {
       row.Selected = true;
       this.selectedRows.push(row);
-      this.tipKarte = row.TicketType;
+      this.tipKarte = row.TicketTypeEncrypted;
       this.cenaRSD = row.PriceFinal.Price;
       this.cenaEur = this.cenaRSD * this.kursEura;
       this.cenaEura = this.cenaEur.toFixed(2);
@@ -324,7 +325,7 @@ export class CenovnikComponent implements OnInit, OnDestroy {
       this.kupljenaKartaID = karta.TicketID;
       this.kupljenaKartaKupljena = Date.parse(karta.BoughtAt);
       this.kupljenaKartaIstice = karta.Expires.slice(0,16).replace('T',' ');
-      this.kupljenaKartaKarta = karta.TicketType;
+      this.kupljenaKartaKarta = karta.TicketTypeEncrypted;
       this.cenaRSD = karta.PriceFinal.Price;
 
       err=> console.log(err);

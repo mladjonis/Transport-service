@@ -5,6 +5,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security.DataProtection;
 using Owin;
+using WebApp.App_Start;
 
 [assembly: OwinStartup(typeof(WebApp.Startup))]
 
@@ -19,6 +20,7 @@ namespace WebApp
             app.UseStaticFiles("/docs");
             ConfigureAuth(app);
             app.MapSignalR();
+            //Encr.InitRijn();
         }
     }
 }

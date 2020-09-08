@@ -21,10 +21,7 @@ namespace WebApp.App_Start
             {
                 // simulate log for failure
             }
-            MailMessage mailMessage = new MailMessage(fromEmail, to, subject, body)
-            {
-                IsBodyHtml = true
-            };
+
             using (var smtpClient = new SmtpClient())
             {
                 smtpClient.UseDefaultCredentials = true;
@@ -33,8 +30,10 @@ namespace WebApp.App_Start
                 smtpClient.Port = smtpClientPort;
                 smtpClient.EnableSsl = true;
                 smtpClient.Credentials = new NetworkCredential(fromEmail, password);
+
                 try
                 {
+                    MailMessage mailMessage = new MailMessage(fromEmail, to, subject, body);
                     smtpClient.Send(mailMessage);
                 }
                 catch(Exception ex)

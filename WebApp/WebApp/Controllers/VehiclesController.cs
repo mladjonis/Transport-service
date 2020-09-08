@@ -51,13 +51,17 @@ namespace WebApp.Controllers
                     }
 
                     (double, double) move = (path[0].X, path[0].Y);
+
                     for (int j = 0; j < path.Count - 1; j++)
                     {
                         var initVehLatitude = path[j].X;
                         var initVehLongitude = path[j].Y;
                         distanceTraveled += 0.05;
-                        bearing = HaversineFormula.Bearing(move.Item1, move.Item2, path[j + 1].X, path[j + 1].Y);
-                        move = HaversineFormula.CalculateNewSetOfPoints(initVehLatitude, initVehLongitude, bearing, distanceTraveled);
+                        //bearing = HaversineFormula.Bearing(move.Item1, move.Item2, path[j + 1].X, path[j + 1].Y);
+                        bearing = HaversineFormula.Bearing(initVehLatitude, initVehLongitude, path[j + 1].X, path[j + 1].Y);
+
+                        //move = HaversineFormula.CalculateNewSetOfPoints(initVehLatitude, initVehLongitude, bearing, distanceTraveled);
+                        move = HaversineFormula.CalculateNewSetOfPoints(move.Item1, move.Item2, bearing, distanceTraveled);
                         data = $"{vehiclesOnLine[i].VehicleID},{move.Item1},{move.Item2},{vehiclesOnLine[i].TransportLineID}|";
 
                         if (data.EndsWith("|"))

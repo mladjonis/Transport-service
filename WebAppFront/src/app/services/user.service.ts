@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import { ChangePasswordBindingModel, UserProfile, PasswordRecovery, ResetPasswordBindingModel, EmailConfirmationRecovery, EmailConfirmation } from '../modeli';
 
@@ -91,7 +91,14 @@ export class UserService {
     }
 
     Export(exportType: string): Observable<any> {
-      return this.http.get<any>(this.base_url + "/api/Account/Export", {params: {exportType:exportType}})
+      if(exportType === "csv.pdf"){
+        console.log('usa sam u if')
+        return this.http.get(this.base_url + "/api/Account/Export", {  responseType: 'blob', params: {exportType: exportType}});
+      }else {
+        console.log('usa sam u else');
+        return this.http.get(this.base_url + "/api/Account/Export", { responseType: 'text', params: {exportType:exportType}});
+      }
+      return this.http.get<any>(this.base_url + "/api/Account/Export", {params: {exportType:exportType}});
     }
 
     ConvertUserTypeIdToString(type: number): string {

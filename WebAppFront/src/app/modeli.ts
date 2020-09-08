@@ -209,20 +209,20 @@ export class PayPalPaymentDetails {
     ShippingAddressStreet : string
     ShippingAddressCity : string
     ShippingAddressState : string
-    ShippingAddressPostalCode :number
+    ShippingAddressPostalCode : string //number
     ShippingAddressCountryCode : string
-    TransactionsAmountTotal : number
+    TransactionsAmountTotal : string //number
     TransactionsAmountCurrency : string
-    TransactionsDetailsSubtotal : number
-    TransactionsDetailsShipping : number
-    TransactionsDetailsHandlingFee : number
-    TransactionsDetailsInsurance : number
-    TransactionsShippingDiscount : number
+    TransactionsDetailsSubtotal : string //number
+    TransactionsDetailsShipping : string //number
+    TransactionsDetailsHandlingFee : string //number
+    TransactionsDetailsInsurance : string //number
+    TransactionsShippingDiscount : string //number
     TransactionsItemListItemsName : string
-    TransactionsItemListItemsPrice : number
+    TransactionsItemListItemsPrice : string //number
     TransactionsItemListItemsCurrencty : string
-    TransactionsItemListItemsQuantity : number
-    TransactionsItemListItemsTax : number
+    TransactionsItemListItemsQuantity : string //number
+    TransactionsItemListItemsTax : string //number
 
     constructor(jsonData : any) {
         this.Id = jsonData['id'];
@@ -243,19 +243,19 @@ export class PayPalPaymentDetails {
         this.ShippingAddressCity = jsonData['payer']['payer_info']['shipping_address']['city'];
         this.ShippingAddressState = jsonData['payer']['payer_info']['shipping_address']['state'];
         this.ShippingAddressCountryCode = jsonData['payer']['payer_info']['shipping_address']['country_code'];
-        this.ShippingAddressPostalCode = jsonData['payer']['payer_info']['shipping_address']['postal_code'];
-        this.TransactionsAmountTotal = jsonData['transactions']['0']['amount']['total'];
+        this.ShippingAddressPostalCode = jsonData['payer']['payer_info']['shipping_address']['postal_code'].toString();
+        this.TransactionsAmountTotal = jsonData['transactions']['0']['amount']['total'].toString();
         this.TransactionsAmountCurrency = jsonData['transactions']['0']['amount']['currency'];
-        this.TransactionsDetailsSubtotal = jsonData['transactions']['0']['amount']['details']['subtotal'];
-        this.TransactionsDetailsShipping = jsonData['transactions']['0']['amount']['details']['shipping'];
-        this.TransactionsDetailsHandlingFee = jsonData['transactions']['0']['amount']['details']['handling_fee'];
-        this.TransactionsDetailsInsurance = jsonData['transactions']['0']['amount']['details']['insurance'];
-        this.TransactionsDetailsShipping = jsonData['transactions']['0']['amount']['details']['shipping_discount'];
+        this.TransactionsDetailsSubtotal = jsonData['transactions']['0']['amount']['details']['subtotal'].toString();
+        this.TransactionsDetailsShipping = jsonData['transactions']['0']['amount']['details']['shipping'].toString();
+        this.TransactionsDetailsHandlingFee = jsonData['transactions']['0']['amount']['details']['handling_fee'].toString();
+        this.TransactionsDetailsInsurance = jsonData['transactions']['0']['amount']['details']['insurance'].toString();
+        this.TransactionsShippingDiscount = jsonData['transactions']['0']['amount']['details']['shipping_discount'].toString();
         this.TransactionsItemListItemsName = jsonData['transactions']['0']['item_list']['items']['0']['name'];
-        this.TransactionsItemListItemsPrice = jsonData['transactions']['0']['item_list']['items']['0']['price'];
+        this.TransactionsItemListItemsPrice = jsonData['transactions']['0']['item_list']['items']['0']['price'].toString();
         this.TransactionsItemListItemsCurrencty = jsonData['transactions']['0']['item_list']['items']['0']['currency'];
-        this.TransactionsItemListItemsQuantity = jsonData['transactions']['0']['item_list']['items']['0']['quantity'];
-        this.TransactionsItemListItemsTax = jsonData['transactions']['0']['item_list']['items']['0']['tax'];
+        this.TransactionsItemListItemsQuantity = jsonData['transactions']['0']['item_list']['items']['0']['quantity'].toString();
+        this.TransactionsItemListItemsTax = jsonData['transactions']['0']['item_list']['items']['0']['tax'].toString();
     }
 }
 
@@ -278,20 +278,20 @@ export class PayPalPaymentDetailsEncrypted {
     ShippingAddressStreetEncrypted : string
     ShippingAddressCityEncrypted : string
     ShippingAddressStateEncrypted : string
-    ShippingAddressPostalCodeEncrypted : number
+    ShippingAddressPostalCodeEncrypted : string //num
     ShippingAddressCountryCodeEncrypted : string
-    TransactionsAmountTotalEncrypted : number
+    TransactionsAmountTotalEncrypted : string //num
     TransactionsAmountCurrencyEncrypted : string
-    TransactionsDetailsSubtotalEncrypted : number
-    TransactionsDetailsShippingEncrypted : number
-    TransactionsDetailsHandlingFeeEncrypted : number
-    TransactionsDetailsInsuranceEncrypted : number
-    TransactionsShippingDiscountEncrypted : number
+    TransactionsDetailsSubtotalEncrypted : string //num
+    TransactionsDetailsShippingEncrypted : string //num
+    TransactionsDetailsHandlingFeeEncrypted : string //num
+    TransactionsDetailsInsuranceEncrypted : string //num
+    TransactionsShippingDiscountEncrypted : string //num
     TransactionsItemListItemsNameEncrypted : string
-    TransactionsItemListItemsPriceEncrypted : number
+    TransactionsItemListItemsPriceEncrypted : string //num
     TransactionsItemListItemsCurrencyEncrypted : string
-    TransactionsItemListItemsQuantityEncrypted : number
-    TransactionsItemListItemsTaxEncrypted : number
+    TransactionsItemListItemsQuantityEncrypted : string //num
+    TransactionsItemListItemsTaxEncrypted : string //num
 
 
     constructor(pp: PayPalPaymentDetails) {
@@ -327,6 +327,4 @@ export class PayPalPaymentDetailsEncrypted {
         this.TransactionsItemListItemsQuantityEncrypted = pp.TransactionsItemListItemsQuantity;
         this.TransactionsItemListItemsTaxEncrypted = pp.TransactionsItemListItemsTax;
     }
-
-
 }

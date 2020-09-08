@@ -292,17 +292,33 @@ namespace WebApp.Models.DomainEntities
             }
         }
 
-        //int
+        //once int
         [NotMapped]
-        public int ShippingAddressPostalCodeEncrypted
+        public string ShippingAddressPostalCodeEncrypted
         {
             get
             {
-                return Convert.ToInt32(Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.ShippingAddressPostalCode.ToString())));
+                //if (this.ShippingAddressPostalCode.Contains("+"))
+                //{
+                //    return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.ShippingAddressPostalCode.Replace("+", "")));
+                //}
+                //else
+                //{
+                    return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.ShippingAddressPostalCode));
+                //}
             }
             set
             {
-                this.ShippingAddressPostalCode = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value.ToString()));
+                //string addedPlus = string.Empty;
+                //if (value.Length % 4 != 0)
+                //{
+                //    addedPlus = value + "+";
+                //    this.ShippingAddressPostalCode = Encr.EncapsulateByteArray(Encr.EncapsulateString(addedPlus));
+                //}
+                //else
+                //{
+                this.ShippingAddressPostalCode = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
+                //}
             }
         }
 
@@ -320,15 +336,16 @@ namespace WebApp.Models.DomainEntities
         }
 
         [NotMapped]
-        public double TransactionsAmountTotalEncrypted
+        //double
+        public string TransactionsAmountTotalEncrypted
         {
             get
             {
-                return Convert.ToDouble(Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsAmountTotal.ToString())));
+                return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsAmountTotal));
             }
             set
             {
-                this.TransactionsAmountTotal = Encr.EncapsulateByteArray(Encr.EncapsulateString(value.ToString()));
+                this.TransactionsAmountTotal = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
             }
         }
 
@@ -346,67 +363,72 @@ namespace WebApp.Models.DomainEntities
         }
 
         [NotMapped]
-        public double TransactionsDetailsSubtotalEncrypted
+        //double
+        public string TransactionsDetailsSubtotalEncrypted
         {
             get
             {
-                return Convert.ToDouble(Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsDetailsSubtotal.ToString())));
+                return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsDetailsSubtotal));
             }
             set
             {
-                this.TransactionsDetailsSubtotal = Encr.EncapsulateByteArray(Encr.EncapsulateString(value.ToString()));
+                this.TransactionsDetailsSubtotal = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
             }
         }
 
         [NotMapped]
-        public double TransactionsDetailsShippingEncrypted
+        //double
+        public string TransactionsDetailsShippingEncrypted
         {
             get
             {
-                return Convert.ToDouble(Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsDetailsShipping)));
+                return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsDetailsShipping));
             }
             set
             {
-                this.TransactionsDetailsShipping = Encr.EncapsulateByteArray(Encr.EncapsulateString(value.ToString()));
+                this.TransactionsDetailsShipping = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
             }
         }
 
         [NotMapped]
-        public double TransactionsDetailsHandlingFeeEncrypted
+        //double
+        public string TransactionsDetailsHandlingFeeEncrypted
         {
             get
             {
-                return Convert.ToDouble(Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsDetailsHandlingFee)));
+                return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsDetailsHandlingFee));
             }
             set
             {
-                this.TransactionsDetailsHandlingFee = Encr.EncapsulateByteArray(Encr.EncapsulateString(value.ToString()));
+                this.TransactionsDetailsHandlingFee = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
             }
         }
 
         [NotMapped]
-        public double TransactionsDetailsInsuranceEncrypted
+        //double
+        public string TransactionsDetailsInsuranceEncrypted
         {
             get
             {
-                return Convert.ToDouble(Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsDetailsInsurance)));
+                return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsDetailsInsurance));
             }
             set
             {
-                this.TransactionsDetailsInsurance = Encr.EncapsulateByteArray(Encr.EncapsulateString(value.ToString()));
+                this.TransactionsDetailsInsurance = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
             }
         }
 
         [NotMapped]
-        public double TransactionsShippingDiscountEncrypted
+        //double
+        public string TransactionsShippingDiscountEncrypted
         {
             get
             {
-                return Convert.ToDouble(Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsShippingDiscount)));
+                return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsShippingDiscount));
             }
             set
             {
-                this.TransactionsShippingDiscount = Encr.EncapsulateByteArray(Encr.EncapsulateString(value.ToString()));
+                this.TransactionsShippingDiscount = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
             }
         }
 
@@ -424,15 +446,16 @@ namespace WebApp.Models.DomainEntities
         }
 
         [NotMapped]
-        public double TransactionsItemListItemsPriceEncrypted
+        //double
+        public string TransactionsItemListItemsPriceEncrypted
         {
             get
             {
-                return Convert.ToDouble(Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsItemListItemsPrice)));
+                return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsItemListItemsPrice));
             }
             set
             {
-                this.TransactionsItemListItemsPrice = Encr.EncapsulateByteArray(Encr.EncapsulateString(value.ToString()));
+                this.TransactionsItemListItemsPrice = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
             }
         }
 
@@ -450,31 +473,47 @@ namespace WebApp.Models.DomainEntities
         }
 
         [NotMapped]
-        public int TransactionsItemListItemsQuantityEncrypted
+        //int
+        public string TransactionsItemListItemsQuantityEncrypted
         {
             get
             {
-                return Convert.ToInt32(Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsItemListItemsQuantity)));
+                //if (this.TransactionsItemListItemsQuantity.Contains("+"))
+                //{
+                //    return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsItemListItemsQuantity.Replace("+", "")));
+                //}
+                //else
+                //{
+                    return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsItemListItemsQuantity));
+                //}
             }
             set
             {
-                this.TransactionsItemListItemsQuantity = Encr.EncapsulateByteArray(Encr.EncapsulateString(value.ToString()));
+                //string addedPlus = string.Empty;
+                //if (value.ToString().Length % 4 != 0)
+                //{
+                //    addedPlus = value + "+";
+                //    this.TransactionsItemListItemsQuantity = Encr.EncapsulateByteArray(Encr.EncapsulateString(addedPlus));
+                //}
+                //else
+                //{
+                this.TransactionsItemListItemsQuantity = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
+                //}
             }
         }
 
         [NotMapped]
-        public double TransactionsItemListItemsTaxEncrypted
+        //double
+        public string TransactionsItemListItemsTaxEncrypted
         {
             get
             {
-                return Convert.ToDouble(Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsItemListItemsTax)));
+                return Encr.DecryptStringFromBytes(Encr.EncapsulateString(this.TransactionsItemListItemsTax));
             }
             set
             {
-                this.TransactionsItemListItemsTax = Encr.EncapsulateByteArray(Encr.EncapsulateString(value.ToString()));
+                this.TransactionsItemListItemsTax = Encr.EncapsulateByteArray(Encr.EncryptStringToBytes(value));
             }
         }
-
-
     }
 }

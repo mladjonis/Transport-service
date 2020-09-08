@@ -30,10 +30,10 @@ export class CenovnikEditComponent implements OnInit {
 
   ngOnInit() { 
     this.pricelistService.GetCurrentPricelist().subscribe(data=>{
-      this.f.regularna.setValue(data.PriceFinals[data.PriceFinals.findIndex(x=>x.Ticket.TicketType == "regularna")].Price);
-      this.f.dnevna.setValue(data.PriceFinals[data.PriceFinals.findIndex(x=>x.Ticket.TicketType == "dnevna")].Price);
-      this.f.mesecna.setValue(data.PriceFinals[data.PriceFinals.findIndex(x=>x.Ticket.TicketType == "mesecna")].Price);
-      this.f.godisnja.setValue(data.PriceFinals[data.PriceFinals.findIndex(x=>x.Ticket.TicketType == "godisnja")].Price);
+      this.f.regularna.setValue(data.PriceFinals[data.PriceFinals.findIndex(x=>x.Ticket.TicketTypeEncrypted == "regularna")].Price);
+      this.f.dnevna.setValue(data.PriceFinals[data.PriceFinals.findIndex(x=>x.Ticket.TicketTypeEncrypted == "dnevna")].Price);
+      this.f.mesecna.setValue(data.PriceFinals[data.PriceFinals.findIndex(x=>x.Ticket.TicketTypeEncrypted == "mesecna")].Price);
+      this.f.godisnja.setValue(data.PriceFinals[data.PriceFinals.findIndex(x=>x.Ticket.TicketTypeEncrypted == "godisnja")].Price);
       this.f.pricelistId.setValue(data.ID);
       this.f.from.setValue(data.From);
       this.f.data.setValue(JSON.stringify(data));

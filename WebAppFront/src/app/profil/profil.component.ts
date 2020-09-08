@@ -229,17 +229,37 @@ export class ProfilComponent implements OnInit,OnDestroy {
       return;
     }
 
-    if(csvValue && pdfValue){
+    //if(csvValue && pdfValue){
       exportType = `csv.pdf`;
-    }else if(csvValue){
-      exportType = `csv`;
-    }else {
-      exportType = `pdf`;
-    }
+    // }else if(csvValue){
+    //   exportType = `csv`;
+    // }else {
+    //   exportType = `pdf`;
+    // }
     console.log(exportType);
 
     this.subscription.add(this.userService.Export(exportType).subscribe(response=>{
-      console.log(response);
+      let blob;
+      let name;
+      // if(csvValue && pdfValue){
+        blob = new Blob([response], { type: 'application/zip' }); // you can change the type
+        name = `${this.userId.replace('.','_')}data.zip`;
+      // }else if (csvValue){
+      //   blob = new Blob([response], { type: 'application/csv' }); // you can change the type
+      //   name = "dataCsv.zip";
+      // }else {
+      //   blob = new Blob([response], { type: 'application/pdf' }); // you can change the type
+      //   name = "data.pdf";
+      // }
+      const a = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      a.href = url;
+      a.download = name;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+      // const url= window.URL.createObjectURL(blob);
+      // window.open(url);
     },err=>{
       console.log(err);
     }));
